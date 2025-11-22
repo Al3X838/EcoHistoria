@@ -1,0 +1,607 @@
+/* Casino Styles */
+.casino-container {
+    max-width: 1400px;
+}
+
+.casino-header {
+    background: linear-gradient(135deg, var(--rojo-casino), var(--amarillo-acento));
+    color: var(--blanco);
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+
+.casino-balance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 1.5rem;
+}
+
+.balance-label {
+    font-weight: normal;
+}
+
+.balance-value {
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;
+}
+
+.balance-unit {
+    font-size: 1rem;
+}
+
+/* Advertencia de Juego Responsable */
+.responsible-gaming-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: #fffbeb;
+    border-left: 4px solid var(--amarillo-acento);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.warning-icon {
+    font-size: 2rem;
+}
+
+.warning-content strong {
+    color: #92400e;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.warning-content p {
+    color: #78350f;
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+/* Juegos Grid */
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.game-card {
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-decoration: none;
+    color: var(--gris-texto);
+    box-shadow: 0 4px 12px var(--sombra);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px var(--sombra);
+}
+
+.game-card.ruleta {
+    border-top: 4px solid #ef4444;
+}
+
+.game-card.slots {
+    border-top: 4px solid var(--amarillo-acento);
+}
+
+.game-card.dados {
+    border-top: 4px solid var(--verde-primario);
+}
+
+.game-icon {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.game-title {
+    font-size: 1.5rem;
+    color: var(--verde-oscuro);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.game-description {
+    text-align: center;
+    color: var(--gris-texto);
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.game-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.feature {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    background-color: var(--verde-muy-claro);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+/* Estadísticas del Casino */
+.casino-stats {
+    margin-bottom: 3rem;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card-casino {
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 8px var(--sombra);
+}
+
+.stat-card-casino.positive {
+    border-left: 4px solid var(--verde-primario);
+}
+
+.stat-card-casino.negative {
+    border-left: 4px solid var(--rojo-casino);
+}
+
+.stat-card-casino .stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card-casino .stat-value {
+    font-size: 1.75rem;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    color: var(--verde-oscuro);
+}
+
+.stat-card-casino .stat-label {
+    font-size: 0.875rem;
+    color: var(--gris-texto);
+}
+
+/* Historial de Casino */
+.casino-history {
+    margin-bottom: 2rem;
+}
+
+.history-table-container {
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table thead {
+    background-color: var(--verde-muy-claro);
+}
+
+.history-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--verde-oscuro);
+}
+
+.history-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--verde-claro);
+}
+
+/* Juego Individual */
+.casino-game-container {
+    max-width: 1200px;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.btn-back {
+    padding: 0.5rem 1rem;
+    background-color: var(--gris-claro);
+    color: var(--gris-texto);
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #e5e7eb;
+}
+
+.game-balance {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--verde-muy-claro);
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+}
+
+/* RULETA */
+.ruleta-game {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.ruleta-wheel-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.ruleta-wheel {
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        #ef4444 0deg 18deg,
+        #10b981 18deg 36deg,
+        #ef4444 36deg 54deg,
+        #10b981 54deg 72deg,
+        #ef4444 72deg 90deg,
+        #10b981 90deg 108deg,
+        #ef4444 108deg 126deg,
+        #10b981 126deg 144deg,
+        #ef4444 144deg 162deg,
+        #10b981 162deg 180deg,
+        #ef4444 180deg 198deg,
+        #10b981 198deg 216deg,
+        #ef4444 216deg 234deg,
+        #10b981 234deg 252deg,
+        #ef4444 252deg 270deg,
+        #10b981 270deg 288deg,
+        #ef4444 288deg 306deg,
+        #10b981 306deg 324deg,
+        #ef4444 324deg 342deg,
+        #10b981 342deg 360deg
+    );
+    border: 10px solid #374151;
+    position: relative;
+    transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background-color: var(--amarillo-acento);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border: 4px solid var(--blanco);
+    z-index: 10;
+}
+
+.wheel-ball {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: var(--blanco);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
+
+.resultado-display {
+    margin-top: 2rem;
+    text-align: center;
+    padding: 1.5rem;
+    background-color: var(--verde-muy-claro);
+    border-radius: 1rem;
+}
+
+.resultado-numero {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--verde-oscuro);
+    font-family: 'Courier New', monospace;
+}
+
+.resultado-color {
+    font-size: 1.25rem;
+    color: var(--gris-texto);
+    margin-top: 0.5rem;
+}
+
+.ruleta-controls {
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 2px 8px var(--sombra);
+}
+
+.payouts-table {
+    margin-top: 2rem;
+}
+
+/* SLOTS */
+.slots-game {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.slots-machine {
+    background: linear-gradient(135deg, #1f2937, #374151);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.slots-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.slots-title {
+    color: var(--amarillo-acento);
+    font-size: 2rem;
+    text-shadow: 0 0 10px var(--amarillo-acento);
+}
+
+.slots-reels {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.reel {
+    width: 120px;
+    height: 120px;
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    border: 4px solid var(--amarillo-acento);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s ease;
+}
+
+.reel.spinning {
+    animation: spin 0.1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+
+.reel.win {
+    animation: pulse 0.5s ease infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.slots-controls {
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.payouts-slots {
+    margin-top: 2rem;
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.payout-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.payout-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: var(--gris-claro);
+    border-radius: 0.5rem;
+}
+
+.payout-item.jackpot {
+    background: linear-gradient(135deg, var(--amarillo-acento), #fbbf24);
+    font-weight: bold;
+}
+
+.payout-combo {
+    font-size: 1.25rem;
+}
+
+.payout-multi {
+    font-weight: bold;
+    color: var(--verde-oscuro);
+}
+
+/* DADOS */
+.dados-game {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.dados-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1f2937, #374151);
+    border-radius: 1rem;
+    padding: 3rem;
+    min-height: 400px;
+}
+
+.dados-display {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.dado {
+    width: 100px;
+    height: 100px;
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--gris-texto);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.dado.rolling {
+    animation: roll 0.5s ease infinite;
+}
+
+@keyframes roll {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(90deg); }
+    50% { transform: rotate(180deg); }
+    75% { transform: rotate(270deg); }
+}
+
+.suma-display {
+    font-size: 2rem;
+    color: var(--amarillo-acento);
+    font-weight: bold;
+    padding: 1rem 2rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem;
+}
+
+.dados-controls {
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 2px 8px var(--sombra);
+}
+
+.payouts-dados {
+    grid-column: 1 / -1;
+    background-color: var(--blanco);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.payouts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.payout-col h4 {
+    color: var(--verde-oscuro);
+    margin-bottom: 1rem;
+}
+
+.payout-col p {
+    margin: 0.5rem 0;
+    color: var(--gris-texto);
+}
+
+/* Mensaje del Juego */
+.game-message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.game-message.success {
+    background-color: var(--verde-muy-claro);
+    color: var(--verde-oscuro);
+    border-left: 4px solid var(--verde-primario);
+}
+
+.game-message.error {
+    background-color: #fee;
+    color: var(--rojo-casino);
+    border-left: 4px solid var(--rojo-casino);
+}
+
+.game-message.win {
+    background: linear-gradient(135deg, var(--amarillo-acento), #fbbf24);
+    color: #78350f;
+    font-size: 1.25rem;
+    animation: celebrate 0.5s ease;
+}
+
+@keyframes celebrate {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Responsive Casino */
+@media (max-width: 768px) {
+    .ruleta-game,
+    .dados-game {
+        grid-template-columns: 1fr;
+    }
+    
+    .ruleta-wheel {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .slots-reels {
+        gap: 0.5rem;
+    }
+    
+    .reel {
+        width: 80px;
+        height: 80px;
+        font-size: 3rem;
+    }
+    
+    .payouts-grid {
+        grid-template-columns: 1fr;
+    }
+}

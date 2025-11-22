@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}Rankings - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">🏆</span> Rankings UCA Verde
+        </h1>
+        <p class="page-subtitle">Los mejores estudiantes, facultades y carreras más sostenibles</p>
+    </div>
+
+    <!-- Estadísticas Globales -->
+    <div class="global-stats">
+        <h2 class="section-title">🌍 Estadísticas Globales del Mes</h2>
+        <div class="stats-grid-ranking">
+            <div class="stat-card-ranking">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value">{{ stats.total_usuarios }}</div>
+                <div class="stat-label">Estudiantes Activos</div>
+            </div>
+            <div class="stat-card-ranking">
+                <div class="stat-icon">💚</div>
+                <div class="stat-value">{{ stats.total_puntos }}</div>
+                <div class="stat-label">Puntos Generados</div>
+            </div>
+            <div class="stat-card-ranking">
+                <div class="stat-icon">💨</div>
+                <div class="stat-value">{{ stats.co2_evitado }} kg</div>
+                <div class="stat-label">CO₂ Evitado</div>
+            </div>
+            <div class="stat-card-ranking">
+                <div class="stat-icon">💧</div>
+                <div class="stat-value">{{ stats.agua_ahorrada }} L</div>
+                <div class="stat-label">Agua Ahorrada</div>
+            </div>
+            <div class="stat-card-ranking">
+                <div class="stat-icon">🌳</div>
+                <div class="stat-value">{{ stats.arboles_salvados }}</div>
+                <div class="stat-label">Árboles Salvados</div>
+            </div>
+            <div class="stat-card-ranking">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value">{{ stats.total_transacciones }}</div>
+                <div class="stat-label">Acciones Realizadas</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs de Rankings -->
+    <div class="rankings-tabs">
+        <button class="tab-btn active" onclick="showTab('estudiantes')">
+            👤 Top Estudiantes
+        </button>
+        <button class="tab-btn" onclick="showTab('facultades')">
+            🏛️ Facultades
+        </button>
+        <button class="tab-btn" onclick="showTab('carreras')">
+            🎓 Carreras
+        </button>
+    </div>
+
+    <!-- Tab: Top Estudiantes -->
+    <div class="tab-content active" id="tab-estudiantes">
+        <div class="card ranking-card-full">
+            <h2 class="card-title">👑 Top 20 Estudiantes Más Verdes</h2>
+            <div class="ranking-list-full">
+                {% for user in ranking_estudiantes %}
+                <div class="ranking-item-full {% if user.id == current_user.id %}highlighted{% endif %}">
+                    <div class="ranking-position">
+                        {% if loop.index == 1 %}
+                            <span class="medal gold">🥇</span>
+                        {% elif loop.index == 2 %}
+                            <span class="medal silver">🥈</span>
+                        {% elif loop.index == 3 %}
+                            <span class="medal bronze">🥉</span>
+                        {% else %}
+                            <span class="position-number">{{ loop.index }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="ranking-avatar">
+                        <div class="avatar-circle">{{ user.nombre_completo[0] }}</div>
+                    </div>
+                    <div class="ranking-info">
+                        <h4 class="ranking-name">
+                            {{ user.nombre_completo }}
+                            {% if user.id == current_user.id %}<span class="badge-you">Tú</span>{% endif %}
+                        </h4>
+                        <p class="ranking-details">
+                            {{ user.carrera }} • {{ user.facultad }}
+                        </p>
+                        <div class="ranking-level">
+                            <span class="level-badge">{{ user.nivel }}</span>
+                            <span class="streak-badge">🔥 {{ user.racha_actual }} días</span>
+                        </div>
+                    </div>
+                    <div class="ranking-points">
+                        <span class="points-value">{{ user.puntos_totales }}</span>
+                        <span class="points-label">puntos</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab: Facultades -->
+    <div class="tab-content" id="tab-facultades">
+        <div class="card ranking-card-full">
+            <h2 class="card-title">🏛️ Ranking de Facultades</h2>
+            <div class="ranking-list-full">
+                {% for facultad in ranking_facultades %}
+                <div class="ranking-item-full">
+                    <div class="ranking-position">
+                        {% if loop.index == 1 %}
+                            <span class="medal gold">🥇</span>
+                        {% elif loop.index == 2 %}
+                            <span class="medal silver">🥈</span>
+                        {% elif loop.index == 3 %}
+                            <span class="medal bronze">🥉</span>
+                        {% else %}
+                            <span class="position-number">{{ loop.index }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="ranking-avatar">
+                        <div class="avatar-circle faculty">🏛️</div>
+                    </div>
+                    <div class="ranking-info">
+                        <h4 class="ranking-name">{{ facultad.facultad }}</h4>
+                        <p class="ranking-details">
+                            {{ facultad.estudiantes }} estudiantes participando
+                        </p>
+                        <div class="ranking-stats-mini">
+                            <span>Promedio: {{ (facultad.puntos / facultad.estudiantes)|round(1) }} pts/estudiante</span>
+                        </div>
+                    </div>
+                    <div class="ranking-points">
+                        <span class="points-value">{{ facultad.puntos }}</span>
+                        <span class="points-label">puntos totales</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab: Carreras -->
+    <div class="tab-content" id="tab-carreras">
+        <div class="card ranking-card-full">
+            <h2 class="card-title">🎓 Top 20 Carreras Más Sostenibles</h2>
+            <div class="ranking-list-full">
+                {% for carrera in ranking_carreras %}
+                <div class="ranking-item-full">
+                    <div class="ranking-position">
+                        {% if loop.index == 1 %}
+                            <span class="medal gold">🥇</span>
+                        {% elif loop.index == 2 %}
+                            <span class="medal silver">🥈</span>
+                        {% elif loop.index == 3 %}
+                            <span class="medal bronze">🥉</span>
+                        {% else %}
+                            <span class="position-number">{{ loop.index }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="ranking-avatar">
+                        <div class="avatar-circle career">🎓</div>
+                    </div>
+                    <div class="ranking-info">
+                        <h4 class="ranking-name">{{ carrera.carrera }}</h4>
+                        <p class="ranking-details">
+                            {{ carrera.facultad }} • {{ carrera.estudiantes }} estudiantes
+                        </p>
+                        <div class="ranking-stats-mini">
+                            <span>Promedio: {{ (carrera.puntos / carrera.estudiantes)|round(1) }} pts/estudiante</span>
+                        </div>
+                    </div>
+                    <div class="ranking-points">
+                        <span class="points-value">{{ carrera.puntos }}</span>
+                        <span class="points-label">puntos totales</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Motivación -->
+    <div class="motivation-section">
+        <div class="motivation-card">
+            <h3>💪 ¡Sigue Adelante!</h3>
+            <p>Cada acción cuenta. Sigue reciclando, participando en eventos y completando quizzes para subir en el ranking.</p>
+            <div class="motivation-actions">
+                <a href="{{ url_for('recycle.index') }}" class="btn btn-primary">Reciclar Ahora</a>
+                <a href="{{ url_for('recycle.tasks') }}" class="btn btn-secondary">Ver Tareas</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showTab(tabName) {
+    // Ocultar todos los tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Mostrar tab seleccionado
+    document.getElementById('tab-' + tabName).classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Reciclar - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">♻️</span> Centro de Reciclaje
+        </h1>
+        <p class="page-subtitle">Registra tus materiales reciclados y gana puntos</p>
+    </div>
+
+    <div class="recycle-grid">
+        <!-- Formulario de Reciclaje -->
+        <div class="card recycle-form-card">
+            <h2 class="card-title">Registrar Material</h2>
+            
+            <form method="POST" class="recycle-form">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    <label for="material_id">Tipo de Material</label>
+                    {{ form.material_id(class="form-control") }}
+                    {% if form.material_id.errors %}
+                        <span class="form-error">{{ form.material_id.errors[0] }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="cantidad">Cantidad</label>
+                    {{ form.cantidad(class="form-control", min="1", max="100", value="1") }}
+                    {% if form.cantidad.errors %}
+                        <span class="form-error">{{ form.cantidad.errors[0] }}</span>
+                    {% endif %}
+                    <small class="form-hint">Máximo 100 unidades por registro</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    ♻️ Registrar Reciclaje
+                </button>
+            </form>
+        </div>
+
+        <!-- Catálogo de Materiales -->
+        <div class="card materiales-card">
+            <h2 class="card-title">Materiales Aceptados</h2>
+            
+            <div class="materiales-grid">
+                {% for material in materiales %}
+                <div class="material-item">
+                    <div class="material-icon">
+                        {% if 'lata' in material.nombre.lower() %}🥫
+                        {% elif 'vidrio' in material.nombre.lower() %}🍾
+                        {% elif 'plastico' in material.nombre.lower() or 'plástico' in material.nombre.lower() %}♻️
+                        {% elif 'carton' in material.nombre.lower() or 'cartón' in material.nombre.lower() %}📦
+                        {% elif 'papel' in material.nombre.lower() %}📄
+                        {% elif 'tetra' in material.nombre.lower() %}📦
+                        {% else %}♻️
+                        {% endif %}
+                    </div>
+                    <div class="material-info">
+                        <h4 class="material-name">{{ material.nombre }}</h4>
+                        <p class="material-category">{{ material.categoria }}</p>
+                        <div class="material-points">
+                            <span class="points-badge">{{ material.puntos_valor }} pts</span>
+                            <span class="points-unit">por {{ material.unidad_medida }}</span>
+                        </div>
+                        <div class="material-impact">
+                            <small>💨 {{ material.impacto_co2 }} kg CO₂</small>
+                            <small>💧 {{ material.impacto_agua }} L agua</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Historial Reciente -->
+        <div class="card historial-card">
+            <h2 class="card-title">
+                <span>📊 Historial Reciente</span>
+                <a href="{{ url_for('recycle.history') }}" class="btn-link-small">Ver todo</a>
+            </h2>
+            
+            {% if historial %}
+                <div class="historial-list">
+                    {% for trans in historial %}
+                    <div class="historial-item">
+                        <div class="historial-icon">♻️</div>
+                        <div class="historial-content">
+                            <p class="historial-desc">{{ trans.descripcion }}</p>
+                            <p class="historial-date">{{ trans.fecha.strftime('%d/%m/%Y %H:%M') }}</p>
+                        </div>
+                        <div class="historial-points">+{{ trans.puntos }} pts</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">No has reciclado aún. ¡Empieza ahora! 🌱</p>
+            {% endif %}
+        </div>
+
+        <!-- Tips de Reciclaje -->
+        <div class="card tips-card">
+            <h2 class="card-title">💡 Tips de Reciclaje</h2>
+            <div class="tips-list">
+                <div class="tip-item">
+                    <span class="tip-icon">✅</span>
+                    <p>Limpia los envases antes de reciclarlos</p>
+                </div>
+                <div class="tip-item">
+                    <span class="tip-icon">✅</span>
+                    <p>Separa las tapas de las botellas</p>
+                </div>
+                <div class="tip-item">
+                    <span class="tip-icon">✅</span>
+                    <p>Aplasta las cajas de cartón para ahorrar espacio</p>
+                </div>
+                <div class="tip-item">
+                    <span class="tip-icon">✅</span>
+                    <p>No mezcles diferentes tipos de materiales</p>
+                </div>
+                <div class="tip-item">
+                    <span class="tip-icon">✅</span>
+                    <p>Mantén una racha diaria para más puntos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Resetear Contraseña') }}{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>{{ _('Resetear Contraseña') }}</h1>
+            <p>{{ _('Ingresa tu nueva contraseña.') }}</p>
+        </div>
+
+        <form method="POST" class="auth-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                <label for="password">{{ _('Nueva Contraseña') }}</label>
+                {{ form.password(class="form-control", placeholder=_('Mínimo 6 caracteres')) }}
+                {% if form.password.errors %}
+                    <span class="form-error">{{ form.password.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="password2">{{ _('Confirmar Nueva Contraseña') }}</label>
+                {{ form.password2(class="form-control", placeholder=_('Repetir contraseña')) }}
+                {% if form.password2.errors %}
+                    <span class="form-error">{{ form.password2.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                {{ _('Resetear Contraseña') }}
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

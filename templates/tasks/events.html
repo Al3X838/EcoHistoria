@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Eventos - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">🌍</span> Eventos y Voluntariados
+        </h1>
+        <p class="page-subtitle">Participa en actividades ambientales y gana puntos</p>
+    </div>
+
+    <div class="events-detail-grid">
+        <!-- Limpieza de Playa -->
+        <div class="event-detail-card">
+            <div class="event-image">🏖️</div>
+            <h2>Limpieza de Playa</h2>
+            <p class="event-long-desc">
+                Únete a nuestra jornada mensual de limpieza de playas. Contribuye a mantener 
+                limpias las costas salvadoreñas y protege la vida marina.
+            </p>
+            <div class="event-info">
+                <div class="info-item">
+                    <span class="info-icon">📅</span>
+                    <span>Último sábado de cada mes</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">⏰</span>
+                    <span>8:00 AM - 12:00 PM</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <span>Playa El Tunco</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">💰</span>
+                    <span class="points-highlight">+80 puntos</span>
+                </div>
+            </div>
+            <a href="{{ url_for('recycle.registrar_evento', tipo='limpieza_playa') }}" 
+               class="btn btn-primary btn-block"
+               onclick="return confirm('¿Confirmas tu participación en este evento?')">
+                Registrar Participación
+            </a>
+        </div>
+
+        <!-- Reforestación -->
+        <div class="event-detail-card">
+            <div class="event-image">🌳</div>
+            <h2>Jornada de Reforestación</h2>
+            <p class="event-long-desc">
+                Ayuda a plantar árboles nativos en zonas deforestadas. Cada árbol plantado 
+                contribuye a combatir el cambio climático.
+            </p>
+            <div class="event-info">
+                <div class="info-item">
+                    <span class="info-icon">📅</span>
+                    <span>Primer domingo de cada mes</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">⏰</span>
+                    <span>7:00 AM - 1:00 PM</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <span>Parque Nacional El Boquerón</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">💰</span>
+                    <span class="points-highlight">+100 puntos</span>
+                </div>
+            </div>
+            <a href="{{ url_for('recycle.registrar_evento', tipo='reforestacion') }}" 
+               class="btn btn-primary btn-block"
+               onclick="return confirm('¿Confirmas tu participación en este evento?')">
+                Registrar Participación
+            </a>
+        </div>
+
+        <!-- Taller Ambiental -->
+        <div class="event-detail-card">
+            <div class="event-image">🎓</div>
+            <h2>Taller Ambiental</h2>
+            <p class="event-long-desc">
+                Aprende técnicas de compostaje, huertos urbanos y consumo responsable 
+                en nuestros talleres prácticos.
+            </p>
+            <div class="event-info">
+                <div class="info-item">
+                    <span class="info-icon">📅</span>
+                    <span>Miércoles 15:00 - 17:00</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">⏰</span>
+                    <span>2 horas</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <span>Auditorio UCA</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">💰</span>
+                    <span class="points-highlight">+50 puntos</span>
+                </div>
+            </div>
+            <a href="{{ url_for('recycle.registrar_evento', tipo='taller_ambiental') }}" 
+               class="btn btn-primary btn-block"
+               onclick="return confirm('¿Confirmas tu participación en este evento?')">
+                Registrar Participación
+            </a>
+        </div>
+
+        <!-- Charla de Sostenibilidad -->
+        <div class="event-detail-card">
+            <div class="event-image">💡</div>
+            <h2>Charla de Sostenibilidad</h2>
+            <p class="event-long-desc">
+                Asiste a charlas impartidas por expertos sobre cambio climático, 
+                economía circular y desarrollo sostenible.
+            </p>
+            <div class="event-info">
+                <div class="info-item">
+                    <span class="info-icon">📅</span>
+                    <span>Viernes 16:00 - 18:00</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">⏰</span>
+                    <span>2 horas</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <span>Centro de Conferencias UCA</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">💰</span>
+                    <span class="points-highlight">+30 puntos</span>
+                </div>
+            </div>
+            <a href="{{ url_for('recycle.registrar_evento', tipo='charla_sostenibilidad') }}" 
+               class="btn btn-primary btn-block"
+               onclick="return confirm('¿Confirmas tu participación en este evento?')">
+                Registrar Participación
+            </a>
+        </div>
+    </div>
+
+    <div class="event-note">
+        <p><strong>Nota:</strong> Al registrar tu participación, recibirás los puntos automáticamente. 
+        El equipo UCA Verde verificará tu asistencia posteriormente. Participaciones falsas serán penalizadas.</p>
+    </div>
+</div>
+{% endblock %}

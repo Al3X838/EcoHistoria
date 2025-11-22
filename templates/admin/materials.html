@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Materiales - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">♻️</span> Gestión de Materiales
+        </h1>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">← Volver al Dashboard</a>
+    </div>
+
+    <!-- Formulario para agregar nuevo material -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 class="card-title">➕ Agregar Nuevo Material</h2>
+        <form method="POST" action="{{ url_for('admin.crear_material') }}" class="form-grid">
+            <div class="form-group">
+                <label for="nombre">Nombre del Material</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <select id="categoria" name="categoria" class="form-control" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Plástico">Plástico</option>
+                    <option value="Papel">Papel</option>
+                    <option value="Metal">Metal</option>
+                    <option value="Vidrio">Vidrio</option>
+                    <option value="Orgánico">Orgánico</option>
+                    <option value="Electrónico">Electrónico</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="puntos">Puntos por Unidad</label>
+                <input type="number" id="puntos" name="puntos" class="form-control" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="unidad">Unidad de Medida</label>
+                <select id="unidad" name="unidad" class="form-control" required>
+                    <option value="">Seleccione...</option>
+                    <option value="unidad">Unidad</option>
+                    <option value="kg">Kilogramo (kg)</option>
+                    <option value="hoja">Hoja</option>
+                    <option value="botella">Botella</option>
+                    <option value="lata">Lata</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="co2">CO₂ Evitado (kg)</label>
+                <input type="number" id="co2" name="co2" class="form-control" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="agua">Agua Ahorrada (L)</label>
+                <input type="number" id="agua" name="agua" class="form-control" step="0.1" min="0" required>
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    ✅ Crear Material
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Lista de materiales existentes -->
+    <div class="card">
+        <h2 class="card-title">📋 Materiales Reciclables</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Puntos</th>
+                        <th>Unidad</th>
+                        <th>CO₂ (kg)</th>
+                        <th>Agua (L)</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in materiales %}
+                    <tr>
+                        <td>{{ material.id }}</td>
+                        <td>{{ material.nombre }}</td>
+                        <td>{{ material.categoria }}</td>
+                        <td>{{ material.puntos_valor }}</td>
+                        <td>{{ material.unidad_medida }}</td>
+                        <td>{{ material.impacto_co2 }}</td>
+                        <td>{{ material.impacto_agua }}</td>
+                        <td>
+                            {% if material.activo %}
+                            <span class="badge badge-success">Activo</span>
+                            {% else %}
+                            <span class="badge badge-danger">Inactivo</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('admin.toggle_material', material_id=material.id) }}"
+                                class="btn btn-sm btn-secondary">
+                                {% if material.activo %}Desactivar{% else %}Activar{% endif %}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

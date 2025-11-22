@@ -1,0 +1,379 @@
+# English translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-11-11 18:43+0000\n"
+"PO-Revision-Date: 2025-11-11 18:44+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: routes/auth.py:13
+#, python-format
+msgid "Para resetear la contraseña, visita: %(reset_url)s"
+msgstr "To reset your password, visit: %(reset_url)s"
+
+#: routes/auth.py:35
+#, python-format
+msgid "¡Bienvenido %(nombre)s! Tu cuenta ha sido creada. 🌱"
+msgstr "Welcome %(nombre)s! Your account has been created. 🌱"
+
+#: routes/auth.py:54
+#, python-format
+msgid "¡Bienvenido de vuelta, %(nombre)s! 🌿"
+msgstr "Welcome back, %(nombre)s! 🌿"
+
+#: routes/auth.py:57
+msgid "Usuario o contraseña incorrectos. Intenta de nuevo."
+msgstr "Incorrect username or password. Try again."
+
+#: routes/auth.py:66
+msgid "Has cerrado sesión exitosamente."
+msgstr "You have been logged out successfully."
+
+#: routes/auth.py:77
+msgid "Se ha enviado un correo con las instrucciones para resetear tu contraseña."
+msgstr "An email has been sent with instructions to reset your password."
+
+#: routes/auth.py:79 routes/auth.py:95
+msgid "Resetear Contraseña"
+msgstr "Reset Password"
+
+#: routes/auth.py:87
+msgid "El token es inválido o ha expirado."
+msgstr "The token is invalid or has expired."
+
+#: routes/auth.py:93
+msgid "Tu contraseña ha sido actualizada. Ya puedes iniciar sesión."
+msgstr "Your password has been updated. You can now log in."
+
+#: templates/base.html:25 templates/base.html:117
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: templates/base.html:28 templates/base.html:118
+msgid "Reciclar"
+msgstr "Recycle"
+
+#: templates/base.html:31
+msgid "Tareas"
+msgstr "Tasks"
+
+#: templates/base.html:34 templates/base.html:119
+msgid "Recompensas"
+msgstr "Rewards"
+
+#: templates/base.html:37 templates/base.html:120
+msgid "Rankings"
+msgstr "Rankings"
+
+#: templates/base.html:40
+msgid "Casino"
+msgstr "Casino"
+
+#: templates/base.html:52
+msgid "Puntos:"
+msgstr "Points:"
+
+#: templates/base.html:62
+msgid "Mi Perfil"
+msgstr "My Profile"
+
+#: templates/base.html:66
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/base.html:71
+msgid "Cerrar Sesión"
+msgstr "Log Out"
+
+#: templates/base.html:111
+msgid "Sistema de puntos por reciclaje"
+msgstr "Recycling points system"
+
+#: templates/base.html:112
+msgid "Juntos por un campus sostenible"
+msgstr "Together for a sustainable campus"
+
+#: templates/base.html:115
+msgid "Enlaces"
+msgstr "Links"
+
+#: templates/base.html:124
+msgid "Contacto"
+msgstr "Contact"
+
+#: templates/base.html:131
+msgid "Todos los derechos reservados."
+msgstr "All rights reserved."
+
+#: templates/auth/login.html:3 templates/auth/login.html:11
+#: templates/auth/login.html:37
+msgid "Iniciar Sesión"
+msgstr "Log In"
+
+#: templates/auth/login.html:18
+msgid "Usuario"
+msgstr "Username"
+
+#: templates/auth/login.html:19
+msgid "Ingresa tu usuario"
+msgstr "Enter your username"
+
+#: templates/auth/login.html:26
+msgid "Contraseña"
+msgstr "Password"
+
+#: templates/auth/login.html:27
+msgid "Ingresa tu contraseña"
+msgstr "Enter your password"
+
+#: templates/auth/login.html:32
+msgid "¿Olvidaste tu contraseña?"
+msgstr "Forgot your password?"
+
+#: templates/auth/login.html:42
+msgid "¿No tienes cuenta?"
+msgstr "Don't have an account?"
+
+#: templates/auth/login.html:42
+msgid "Regístrate aquí"
+msgstr "Sign up here"
+
+#: templates/auth/login.html:46
+msgid "Usuarios de prueba:"
+msgstr "Test users:"
+
+#: templates/auth/login.html:47
+msgid "Admin:"
+msgstr "Admin:"
+
+#: templates/auth/login.html:48
+msgid "Estudiante:"
+msgstr "Student:"
+
+#: forms.py:12
+msgid "Seleccionar Facultad"
+msgstr "Select Faculty"
+
+#: forms.py:13
+msgid "Ingeniería"
+msgstr "Engineering"
+
+#: forms.py:14
+msgid "Ciencias Empresariales"
+msgstr "Business Sciences"
+
+#: forms.py:15
+msgid "Ciencias Sociales"
+msgstr "Social Sciences"
+
+#: forms.py:16
+msgid "Arquitectura"
+msgstr "Architecture"
+
+#: forms.py:17
+msgid "Derecho"
+msgstr "Law"
+
+#: forms.py:18
+msgid "Medicina"
+msgstr "Medicine"
+
+#: forms.py:20
+msgid "Carrera"
+msgstr "Major"
+
+#: forms.py:22
+msgid "Confirmar Contraseña"
+msgstr "Confirm Password"
+
+#: forms.py:23
+msgid "Registrarse"
+msgstr "Sign Up"
+
+#: forms.py:28
+msgid "El nombre de usuario ya está en uso."
+msgstr "The username is already in use."
+
+#: forms.py:33
+msgid "El email ya está registrado."
+msgstr "The email is already registered."
+
+#: forms.py:44
+msgid "Solicitar Reseteo de Contraseña"
+msgstr "Request Password Reset"
+
+#: forms.py:48
+msgid "No hay una cuenta con ese email. Debes registrarte primero."
+msgstr "There is no account with that email. You must register first."
+
+#: forms.py:54
+msgid "Nueva Contraseña"
+msgstr "New Password"
+
+#: forms.py:55
+msgid "Confirmar Nueva Contraseña"
+msgstr "Confirm New Password"
+
+#: forms.py:61
+msgid "Material"
+msgstr "Material"
+
+#: forms.py:62
+msgid "Cantidad"
+msgstr "Quantity"
+
+#: forms.py:63
+msgid "Registrar Reciclaje"
+msgstr "Register Recycling"
+
+#: forms.py:68
+msgid "Canjear"
+msgstr "Redeem"
+
+#: forms.py:73
+msgid "Cantidad de Puntos"
+msgstr "Amount of Points"
+
+#: forms.py:74
+msgid "Apostar"
+msgstr "Bet"
+
+#: templates/index.html
+msgid "¡Hola, %(nombre)s! 👋"
+msgstr "Hello, %(nombre)s! 👋"
+
+msgid "Bienvenido a tu espacio verde"
+msgstr "Welcome to your green space"
+
+msgid "Puntos Totales"
+msgstr "Total Points"
+
+msgid "Nivel Actual"
+msgstr "Current Level"
+
+msgid "Racha de Días"
+msgstr "Day Streak"
+
+msgid "Posición Ranking"
+msgstr "Ranking Position"
+
+msgid "Progreso al Siguiente Nivel"
+msgstr "Progress to Next Level"
+
+msgid "%(progreso).1f%% completado"
+msgstr "%(progreso).1f%% complete"
+
+msgid "Misiones Activas"
+msgstr "Active Missions"
+
+msgid "Recompensa:"
+msgstr "Reward:"
+
+msgid "¡No tienes misiones nuevas! Vuelve más tarde. ✨"
+msgstr "You have no new missions! Come back later. ✨"
+
+msgid "Tu Impacto Ambiental"
+msgstr "Your Environmental Impact"
+
+msgid "CO₂ Evitado"
+msgstr "CO₂ Avoided"
+
+msgid "Agua Ahorrada"
+msgstr "Water Saved"
+
+msgid "Árboles Salvados"
+msgstr "Trees Saved"
+
+msgid "Actividad Reciente"
+msgstr "Recent Activity"
+
+msgid "No hay actividad reciente. ¡Empieza a reciclar! 🌱"
+msgstr "No recent activity. Start recycling! 🌱"
+
+msgid "Ver todo el historial →"
+msgstr "View full history →"
+
+msgid "Logros Recientes"
+msgstr "Recent Achievements"
+
+msgid "No has desbloqueado logros aún. ¡Sigue adelante! 💪"
+msgstr "You haven't unlocked any achievements yet. Keep going! 💪"
+
+msgid "Ver todos los logros →"
+msgstr "View all achievements →"
+
+msgid "Top 5 Estudiantes"
+msgstr "Top 5 Students"
+
+msgid "Ver ranking completo →"
+msgstr "View complete ranking →"
+
+msgid "Acciones Rápidas"
+msgstr "Quick Actions"
+
+msgid "Reciclar Ahora"
+msgstr "Recycle Now"
+
+msgid "Registra materiales reciclados"
+msgstr "Register recycled materials"
+
+msgid "Hacer Quiz"
+msgstr "Take Quiz"
+
+msgid "Responde y gana puntos"
+msgstr "Answer and earn points"
+
+msgid "Ver Recompensas"
+msgstr "View Rewards"
+
+msgid "Canjea tus puntos"
+msgstr "Redeem your points"
+
+msgid "Prueba tu suerte"
+msgstr "Try your luck"
+
+#: templates/rewards/rewards.html
+msgid "Catálogo de Recompensas"
+msgstr "Rewards Catalog"
+
+msgid "Canjea tus puntos por increíbles premios"
+msgstr "Redeem your points for amazing prizes"
+
+msgid "Tus puntos disponibles:"
+msgstr "Your available points:"
+
+msgid "Todas"
+msgstr "All"
+
+msgid "Mis Canjes"
+msgstr "My Redemptions"
+
+msgid "Stock:"
+msgstr "Stock:"
+
+msgid "Canjear Ahora"
+msgstr "Redeem Now"
+
+msgid "Sin Stock"
+msgstr "Out of Stock"
+
+msgid "Puntos Insuficientes"
+msgstr "Insufficient Points"
+
+msgid "No hay recompensas disponibles en esta categoría."
+msgstr "No rewards available in this category."
+
+msgid "Ver Todas"
+msgstr "View All"

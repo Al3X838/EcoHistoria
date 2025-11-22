@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Historial de Reciclaje - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">📊</span> Historial de Reciclaje
+        </h1>
+        <p class="page-subtitle">Todas tus contribuciones al medio ambiente</p>
+    </div>
+
+    <div class="card">
+        {% if transacciones.items %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th>Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trans in transacciones.items %}
+                        <tr>
+                            <td>{{ trans.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>
+                                <span class="trans-icon">♻️</span>
+                                {{ trans.descripcion }}
+                            </td>
+                            <td>
+                                <span class="points-badge positive">+{{ trans.puntos }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="pagination">
+                {% if transacciones.has_prev %}
+                    <a href="{{ url_for('recycle.history', page=transacciones.prev_num) }}" class="btn btn-secondary">← Anterior</a>
+                {% endif %}
+                
+                <span class="pagination-info">Página {{ transacciones.page }} de {{ transacciones.pages }}</span>
+                
+                {% if transacciones.has_next %}
+                    <a href="{{ url_for('recycle.history', page=transacciones.next_num) }}" class="btn btn-secondary">Siguiente →</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <p class="empty-state-large">
+                <span class="empty-icon">📭</span>
+                No tienes historial de reciclaje aún.
+                <a href="{{ url_for('recycle.index') }}" class="btn btn-primary">Empezar a Reciclar</a>
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

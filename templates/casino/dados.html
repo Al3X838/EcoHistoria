@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Dados Verdes - Casino{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/casino.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container casino-game-container">
+    <div class="game-header">
+        <a href="{{ url_for('casino.index') }}" class="btn-back">← Volver al Casino</a>
+        <h1 class="game-title">🎲 Dados Verdes</h1>
+        <div class="game-balance">
+            <span class="balance-label">Saldo:</span>
+            <span class="balance-value" id="saldo-actual">{{ current_user.puntos_totales }}</span>
+            <span class="balance-unit">pts</span>
+        </div>
+    </div>
+
+    <div class="dados-game">
+        <div class="dados-table">
+            <div class="dados-display">
+                <div class="dado" id="dado-1">
+                    <div class="dado-face">?</div>
+                </div>
+                <div class="dado" id="dado-2">
+                    <div class="dado-face">?</div>
+                </div>
+            </div>
+            <div class="suma-display" id="suma-display" style="display: none;">
+                Suma: <span id="suma-valor">0</span>
+            </div>
+        </div>
+
+        <div class="dados-controls">
+            <h3>💰 Hacer Apuesta</h3>
+            
+            <div class="form-group">
+                <label>Cantidad:</label>
+                <input type="number" id="cantidad-apuesta" class="form-control" 
+                       min="10" max="{{ (current_user.puntos_totales * 0.30)|int }}" 
+                       value="10" step="5">
+                <small class="form-hint">Mín: 10 | Máx: {{ (current_user.puntos_totales * 0.30)|int }} pts</small>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de apuesta:</label>
+                <select id="tipo-apuesta" class="form-control">
+                    <option value="suma">Suma exacta</option>
+                    <option value="par">Par (x2)</option>
+                    <option value="impar">Impar (x2)</option>
+                    <option value="mayor7">Mayor que 7 (x2)</option>
+                    <option value="menor7">Menor que 7 (x2)</option>
+                    <option value="dobles">Dobles (x8)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="suma-group">
+                <label>Suma (2-12):</label>
+                <input type="number" id="suma-elegida" class="form-control" 
+                       min="2" max="12" value="7">
+            </div>
+
+            <button class="btn btn-primary btn-block btn-lg" id="btn-lanzar" onclick="lanzarDados()">
+                🎲 Lanzar Dados
+            </button>
+
+            <div class="game-message" id="game-message" style="display: none;"></div>
+        </div>
+
+        <!-- Tabla de Pagos -->
+        <div class="payouts-dados">
+            <h3>📋 Multiplicadores</h3>
+            <div class="payouts-grid">
+                <div class="payout-col">
+                    <h4>Suma Exacta:</h4>
+                    <p>2 o 12: x30</p>
+                    <p>3 o 11: x15</p>
+                    <p>4 o 10: x10</p>
+                    <p>5 o 9: x8</p>
+                    <p>6 o 8: x6</p>
+                    <p>7: x5</p>
+                </div>
+                <div class="payout-col">
+                    <h4>Otras Apuestas:</h4>
+                    <p>Par/Impar: x2</p>
+                    <p>Mayor/Menor 7: x2</p>
+                    <p>Dobles: x8</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dados.js') }}"></script>
+<script src="{{ url_for('static', filename='js/casino.js') }}"></script>
+{% endblock %}

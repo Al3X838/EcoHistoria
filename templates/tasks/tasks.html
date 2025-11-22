@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Tareas - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">📚</span> Tareas y Actividades
+        </h1>
+        <p class="page-subtitle">Completa tareas educativas y gana puntos extra</p>
+    </div>
+
+    <!-- Quizzes Disponibles -->
+    <div class="section">
+        <h2 class="section-title">🧠 Quizzes Educativos</h2>
+        <div class="tasks-grid">
+            {% for quiz in quizzes %}
+            <div class="task-card {% if quiz.id in completados %}completed{% endif %}">
+                <div class="task-icon">📝</div>
+                <div class="task-content">
+                    <h3 class="task-title">{{ quiz.titulo }}</h3>
+                    <p class="task-category">{{ quiz.categoria }}</p>
+                    <div class="task-reward">
+                        <span class="reward-icon">💰</span>
+                        <span class="reward-value">{{ quiz.puntos_recompensa }} puntos</span>
+                    </div>
+                </div>
+                {% if quiz.id in completados %}
+                    <div class="task-status completed">
+                        <span class="status-icon">✅</span> Completado
+                    </div>
+                {% else %}
+                    <a href="{{ url_for('recycle.quiz', quiz_id=quiz.id) }}" class="btn btn-primary btn-block">
+                        Comenzar Quiz
+                    </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Eventos y Voluntariados -->
+    <div class="section">
+        <h2 class="section-title">🌍 Eventos y Voluntariados</h2>
+        <div class="events-grid">
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="event-icon">🏖️</span>
+                    <h3>Limpieza de Playa</h3>
+                </div>
+                <p class="event-description">Únete a nuestra jornada de limpieza en las playas de El Salvador</p>
+                <div class="event-points">+80 puntos</div>
+                <a href="{{ url_for('recycle.eventos') }}" class="btn btn-secondary btn-block">Ver Detalles</a>
+            </div>
+
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="event-icon">🌳</span>
+                    <h3>Reforestación</h3>
+                </div>
+                <p class="event-description">Planta árboles y ayuda a reforestar zonas deforestadas</p>
+                <div class="event-points">+100 puntos</div>
+                <a href="{{ url_for('recycle.eventos') }}" class="btn btn-secondary btn-block">Ver Detalles</a>
+            </div>
+
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="event-icon">🎓</span>
+                    <h3>Taller Ambiental</h3>
+                </div>
+                <p class="event-description">Aprende sobre sostenibilidad en nuestros talleres mensuales</p>
+                <div class="event-points">+50 puntos</div>
+                <a href="{{ url_for('recycle.eventos') }}" class="btn btn-secondary btn-block">Ver Detalles</a>
+            </div>
+
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="event-icon">💡</span>
+                    <h3>Charla de Sostenibilidad</h3>
+                </div>
+                <p class="event-description">Asiste a charlas sobre impacto ambiental y cambio climático</p>
+                <div class="event-points">+30 puntos</div>
+                <a href="{{ url_for('recycle.eventos') }}" class="btn btn-secondary btn-block">Ver Detalles</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desafíos Semanales -->
+    <div class="section">
+        <h2 class="section-title">🎯 Desafíos Semanales</h2>
+        <div class="challenges-list">
+            <div class="challenge-card">
+                <div class="challenge-icon">🔥</div>
+                <div class="challenge-content">
+                    <h4>Racha de 7 días</h4>
+                    <p>Mantén tu racha reciclando durante 7 días consecutivos</p>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ (current_user.racha_actual / 7 * 100) if current_user.racha_actual < 7 else 100 }}%"></div>
+                        </div>
+                        <span class="progress-text">{{ current_user.racha_actual }}/7 días</span>
+                    </div>
+                </div>
+                <div class="challenge-reward">+50 pts</div>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-icon">♻️</div>
+                <div class="challenge-content">
+                    <h4>Recicla 10 items esta semana</h4>
+                    <p>Registra 10 materiales reciclados antes del domingo</p>
+                </div>
+                <div class="challenge-reward">+30 pts</div>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-icon">🎓</div>
+                <div class="challenge-content">
+                    <h4>Completa 3 quizzes</h4>
+                    <p>Responde correctamente 3 quizzes educativos</p>
+                </div>
+                <div class="challenge-reward">+40 pts</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

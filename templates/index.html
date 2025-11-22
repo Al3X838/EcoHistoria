@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container dashboard">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1 class="welcome-title">{{ _('¡Hola, %(nombre)s! 👋', nombre=current_user.nombre_completo.split()[0]) }}</h1>
+        <p class="welcome-subtitle">{{ _('Bienvenido a tu espacio verde') }}</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card primary">
+            <div class="stat-icon">💚</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ current_user.puntos_totales }}</h3>
+                <p class="stat-label">{{ _('Puntos Totales') }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card success">
+            <div class="stat-icon">🏅</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ current_user.nivel }}</h3>
+                <p class="stat-label">{{ _('Nivel Actual') }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card warning">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ current_user.racha_actual }}</h3>
+                <p class="stat-label">{{ _('Racha de Días') }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card info">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ posicion_usuario or '10+' }}</h3>
+                <p class="stat-label">{{ _('Posición Ranking') }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progreso al Siguiente Nivel -->
+    <div class="card nivel-card">
+        <h2 class="card-title">
+            <span class="icon">🌟</span> {{ _('Progreso al Siguiente Nivel') }}
+        </h2>
+        <div class="nivel-info">
+            <div class="nivel-current">
+                <span class="nivel-badge">{{ current_user.nivel }}</span>
+                <span class="nivel-points">{{ current_user.puntos_totales }} pts</span>
+            </div>
+            <div class="nivel-arrow">→</div>
+            <div class="nivel-next">
+                <span class="nivel-badge next">{{ siguiente_nivel }}</span>
+                <span class="nivel-points">{{ puntos_siguiente }} pts</span>
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ progreso }}%"></div>
+        </div>
+        <p class="progress-text">{{ _('%(progreso).1f%% completado', progreso=progreso) }}</p>
+    </div>
+
+    <!-- Misiones Activas -->
+    <div class="card misiones-card">
+        <h2 class="card-title">
+            <span class="icon">🎯</span> {{ _('Misiones Activas') }}
+        </h2>
+        <div class="misiones-list">
+            {% if misiones_activas %}
+            {% for um in misiones_activas %}
+            <div class="mision-item">
+                <div class="mision-header">
+                    <span class="mision-frecuencia {{ um.mision.frecuencia }}">{{ um.mision.frecuencia|capitalize
+                        }}</span>
+                    <h4 class="mision-nombre">{{ um.mision.nombre }}</h4>
+                </div>
+                <p class="mision-descripcion">{{ um.mision.descripcion }}</p>
+                <div class="mision-progreso">
+                    <div class="progreso-barra-mision">
+                        <div class="progreso-fill-mision"
+                            style="width: {{ (um.progreso / um.mision.objetivo) * 100 if um.mision.objetivo > 0 else 0 }}%;">
+                        </div>
+                    </div>
+                    <span class="progreso-texto-mision">{{ um.progreso }} / {{ um.mision.objetivo }}</span>
+                </div>
+                <div class="mision-recompensa">
+                    {{ _('Recompensa:') }} <strong>{{ um.mision.recompensa_puntos }} pts</strong>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="empty-state">{{ _('¡No tienes misiones nuevas! Vuelve más tarde. ✨') }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Grid Principal -->
+    <div class="dashboard-grid">
+        <!-- Impacto Ambiental -->
+        <div class="card impacto-card">
+            <h2 class="card-title">
+                <span class="icon">🌍</span> {{ _('Tu Impacto Ambiental') }}
+            </h2>
+            <div class="impacto-stats">
+                <div class="impacto-item">
+                    <div class="impacto-icon">💨</div>
+                    <div class="impacto-data">
+                        <p class="impacto-value">{{ impacto.co2_evitado }} kg</p>
+                        <p class="impacto-label">{{ _('CO₂ Evitado') }}</p>
+                    </div>
+                </div>
+                <div class="impacto-item">
+                    <div class="impacto-icon">💧</div>
+                    <div class="impacto-data">
+                        <p class="impacto-value">{{ impacto.agua_ahorrada }} L</p>
+                        <p class="impacto-label">{{ _('Agua Ahorrada') }}</p>
+                    </div>
+                </div>
+                <div class="impacto-item">
+                    <div class="impacto-icon">🌳</div>
+                    <div class="impacto-data">
+                        <p class="impacto-value">{{ impacto.arboles_salvados }}</p>
+                        <p class="impacto-label">{{ _('Árboles Salvados') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actividad Reciente -->
+        <div class="card actividad-card">
+            <h2 class="card-title">
+                <span class="icon">📊</span> {{ _('Actividad Reciente') }}
+            </h2>
+            <div class="actividad-list">
+                {% if ultimas_transacciones %}
+                {% for trans in ultimas_transacciones %}
+                <div class="actividad-item">
+                    <div class="actividad-icon {{ trans.tipo }}">
+                        {% if trans.tipo == 'reciclaje' %}♻️
+                        {% elif trans.tipo == 'quiz' %}📚
+                        {% elif trans.tipo == 'evento' %}🎉
+                        {% elif trans.tipo == 'canje' %}🎁
+                        {% elif trans.tipo == 'casino' %}🎰
+                        {% endif %}
+                    </div>
+                    <div class="actividad-content">
+                        <p class="actividad-desc">{{ trans.descripcion }}</p>
+                        <p class="actividad-date">{{ trans.fecha.strftime('%d/%m/%Y %H:%M') }}</p>
+                    </div>
+                    <div class="actividad-points {{ 'positive' if trans.puntos > 0 else 'negative' }}">
+                        {{ '+' if trans.puntos > 0 else '' }}{{ trans.puntos }} pts
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="empty-state">{{ _('No hay actividad reciente. ¡Empieza a reciclar! 🌱') }}</p>
+                {% endif %}
+            </div>
+            <a href="{{ url_for('main.profile') }}" class="btn-link">{{ _('Ver todo el historial →') }}</a>
+        </div>
+
+        <!-- Logros Recientes -->
+        <div class="card logros-card">
+            <h2 class="card-title">
+                <span class="icon">🏆</span> {{ _('Logros Recientes') }}
+            </h2>
+            <div class="logros-list">
+                {% if logros_recientes %}
+                {% for user_logro in logros_recientes %}
+                <div class="logro-item">
+                    <div class="logro-icon">{{ user_logro.logro.icono }}</div>
+                    <div class="logro-content">
+                        <p class="logro-name">{{ user_logro.logro.nombre }}</p>
+                        <p class="logro-desc">{{ user_logro.logro.descripcion }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="empty-state">{{ _('No has desbloqueado logros aún. ¡Sigue adelante! 💪') }}</p>
+                {% endif %}
+            </div>
+            <a href="{{ url_for('main.profile') }}" class="btn-link">{{ _('Ver todos los logros →') }}</a>
+        </div>
+
+        <!-- Top 5 Ranking -->
+        <div class="card ranking-card">
+            <h2 class="card-title">
+                <span class="icon">👑</span> {{ _('Top 5 Estudiantes') }}
+            </h2>
+            <div class="ranking-list">
+                {% for user in ranking %}
+                <div class="ranking-item {% if user.id == current_user.id %}current-user{% endif %}">
+                    <div class="ranking-position">
+                        {% if loop.index == 1 %}🥇
+                        {% elif loop.index == 2 %}🥈
+                        {% elif loop.index == 3 %}🥉
+                        {% else %}{{ loop.index }}
+                        {% endif %}
+                    </div>
+                    <div class="ranking-user">
+                        <p class="ranking-name">{{ user.nombre_completo }}</p>
+                        <p class="ranking-faculty">{{ user.facultad }}</p>
+                    </div>
+                    <div class="ranking-points">{{ user.puntos_totales }} pts</div>
+                </div>
+                {% endfor %}
+            </div>
+            <a href="{{ url_for('main.rankings') }}" class="btn-link">{{ _('Ver ranking completo →') }}</a>
+        </div>
+    </div>
+
+    <!-- Acciones Rápidas -->
+    <div class="quick-actions">
+        <h2 class="section-title">{{ _('Acciones Rápidas') }}</h2>
+        <div class="actions-grid">
+            <a href="{{ url_for('recycle.index') }}" class="action-card">
+                <div class="action-icon">♻️</div>
+                <h3>{{ _('Reciclar Ahora') }}</h3>
+                <p>{{ _('Registra materiales reciclados') }}</p>
+            </a>
+            <a href="{{ url_for('recycle.tasks') }}" class="action-card">
+                <div class="action-icon">📚</div>
+                <h3>{{ _('Hacer Quiz') }}</h3>
+                <p>{{ _('Responde y gana puntos') }}</p>
+            </a>
+            <a href="{{ url_for('rewards.index') }}" class="action-card">
+                <div class="action-icon">🎁</div>
+                <h3>{{ _('Ver Recompensas') }}</h3>
+                <p>{{ _('Canjea tus puntos') }}</p>
+            </a>
+            <a href="{{ url_for('casino.index') }}" class="action-card casino">
+                <div class="action-icon">🎰</div>
+                <h3>{{ _('Casino Verde') }}</h3>
+                <p>{{ _('Prueba tu suerte') }}</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

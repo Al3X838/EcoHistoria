@@ -1,0 +1,251 @@
+# Spanish translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-11-11 18:43+0000\n"
+"PO-Revision-Date: 2025-11-11 18:44+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es\n"
+"Language-Team: es <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: routes/auth.py:13
+#, python-format
+msgid "Para resetear la contraseña, visita: %(reset_url)s"
+msgstr "Para resetear la contraseña, visita: %(reset_url)s"
+
+#: routes/auth.py:35
+#, python-format
+msgid "¡Bienvenido %(nombre)s! Tu cuenta ha sido creada. 🌱"
+msgstr "¡Bienvenido %(nombre)s! Tu cuenta ha sido creada. 🌱"
+
+#: routes/auth.py:54
+#, python-format
+msgid "¡Bienvenido de vuelta, %(nombre)s! 🌿"
+msgstr "¡Bienvenido de vuelta, %(nombre)s! 🌿"
+
+#: routes/auth.py:57
+msgid "Usuario o contraseña incorrectos. Intenta de nuevo."
+msgstr "Usuario o contraseña incorrectos. Intenta de nuevo."
+
+#: routes/auth.py:66
+msgid "Has cerrado sesión exitosamente."
+msgstr "Has cerrado sesión exitosamente."
+
+#: routes/auth.py:77
+msgid "Se ha enviado un correo con las instrucciones para resetear tu contraseña."
+msgstr "Se ha enviado un correo con las instrucciones para resetear tu contraseña."
+
+#: routes/auth.py:79 routes/auth.py:95
+msgid "Resetear Contraseña"
+msgstr "Resetear Contraseña"
+
+#: routes/auth.py:87
+msgid "El token es inválido o ha expirado."
+msgstr "El token es inválido o ha expirado."
+
+#: routes/auth.py:93
+msgid "Tu contraseña ha sido actualizada. Ya puedes iniciar sesión."
+msgstr "Tu contraseña ha sido actualizada. Ya puedes iniciar sesión."
+
+#: templates/base.html:25 templates/base.html:117
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: templates/base.html:28 templates/base.html:118
+msgid "Reciclar"
+msgstr "Reciclar"
+
+#: templates/base.html:31
+msgid "Tareas"
+msgstr "Tareas"
+
+#: templates/base.html:34 templates/base.html:119
+msgid "Recompensas"
+msgstr "Recompensas"
+
+#: templates/base.html:37 templates/base.html:120
+msgid "Rankings"
+msgstr "Rankings"
+
+#: templates/base.html:40
+msgid "Casino"
+msgstr "Casino"
+
+#: templates/base.html:52
+msgid "Puntos:"
+msgstr "Puntos:"
+
+#: templates/base.html:62
+msgid "Mi Perfil"
+msgstr "Mi Perfil"
+
+#: templates/base.html:66
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/base.html:71
+msgid "Cerrar Sesión"
+msgstr "Cerrar Sesión"
+
+#: templates/base.html:111
+msgid "Sistema de puntos por reciclaje"
+msgstr "Sistema de puntos por reciclaje"
+
+#: templates/base.html:112
+msgid "Juntos por un campus sostenible"
+msgstr "Juntos por un campus sostenible"
+
+#: templates/base.html:115
+msgid "Enlaces"
+msgstr "Enlaces"
+
+#: templates/base.html:124
+msgid "Contacto"
+msgstr "Contacto"
+
+#: templates/base.html:131
+msgid "Todos los derechos reservados."
+msgstr "Todos los derechos reservados."
+
+#: templates/auth/login.html:3 templates/auth/login.html:11
+#: templates/auth/login.html:37
+msgid "Iniciar Sesión"
+msgstr "Iniciar Sesión"
+
+#: templates/auth/login.html:18
+msgid "Usuario"
+msgstr "Usuario"
+
+#: templates/auth/login.html:19
+msgid "Ingresa tu usuario"
+msgstr "Ingresa tu usuario"
+
+#: templates/auth/login.html:26
+msgid "Contraseña"
+msgstr "Contraseña"
+
+#: templates/auth/login.html:27
+msgid "Ingresa tu contraseña"
+msgstr "Ingresa tu contraseña"
+
+#: templates/auth/login.html:32
+msgid "¿Olvidaste tu contraseña?"
+msgstr "¿Olvidaste tu contraseña?"
+
+#: templates/auth/login.html:42
+msgid "¿No tienes cuenta?"
+msgstr "¿No tienes cuenta?"
+
+#: templates/auth/login.html:42
+msgid "Regístrate aquí"
+msgstr "Regístrate aquí"
+
+#: templates/auth/login.html:46
+msgid "Usuarios de prueba:"
+msgstr "Usuarios de prueba:"
+
+#: templates/auth/login.html:47
+msgid "Admin:"
+msgstr "Admin:"
+
+#: templates/auth/login.html:48
+msgid "Estudiante:"
+msgstr "Estudiante:"
+
+#: forms.py:12
+msgid "Seleccionar Facultad"
+msgstr "Seleccionar Facultad"
+
+#: forms.py:13
+msgid "Ingeniería"
+msgstr "Ingeniería"
+
+#: forms.py:14
+msgid "Ciencias Empresariales"
+msgstr "Ciencias Empresariales"
+
+#: forms.py:15
+msgid "Ciencias Sociales"
+msgstr "Ciencias Sociales"
+
+#: forms.py:16
+msgid "Arquitectura"
+msgstr "Arquitectura"
+
+#: forms.py:17
+msgid "Derecho"
+msgstr "Derecho"
+
+#: forms.py:18
+msgid "Medicina"
+msgstr "Medicina"
+
+#: forms.py:20
+msgid "Carrera"
+msgstr "Carrera"
+
+#: forms.py:22
+msgid "Confirmar Contraseña"
+msgstr "Confirmar Contraseña"
+
+#: forms.py:23
+msgid "Registrarse"
+msgstr "Registrarse"
+
+#: forms.py:28
+msgid "El nombre de usuario ya está en uso."
+msgstr "El nombre de usuario ya está en uso."
+
+#: forms.py:33
+msgid "El email ya está registrado."
+msgstr "El email ya está registrado."
+
+#: forms.py:44
+msgid "Solicitar Reseteo de Contraseña"
+msgstr "Solicitar Reseteo de Contraseña"
+
+#: forms.py:48
+msgid "No hay una cuenta con ese email. Debes registrarte primero."
+msgstr "No hay una cuenta con ese email. Debes registrarte primero."
+
+#: forms.py:54
+msgid "Nueva Contraseña"
+msgstr "Nueva Contraseña"
+
+#: forms.py:55
+msgid "Confirmar Nueva Contraseña"
+msgstr "Confirmar Nueva Contraseña"
+
+#: forms.py:61
+msgid "Material"
+msgstr "Material"
+
+#: forms.py:62
+msgid "Cantidad"
+msgstr "Cantidad"
+
+#: forms.py:63
+msgid "Registrar Reciclaje"
+msgstr "Registrar Reciclaje"
+
+#: forms.py:68
+msgid "Canjear"
+msgstr "Canjear"
+
+#: forms.py:73
+msgid "Cantidad de Puntos"
+msgstr "Cantidad de Puntos"
+
+#: forms.py:74
+msgid "Apostar"
+msgstr "Apostar"

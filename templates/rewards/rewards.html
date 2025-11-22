@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Recompensas - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">🎁</span> {{ _('Catálogo de Recompensas') }}
+        </h1>
+        <p class="page-subtitle">{{ _('Canjea tus puntos por increíbles premios') }}</p>
+        <div class="user-points-display">
+            <span class="points-label">{{ _('Tus puntos disponibles:') }}</span>
+            <span class="points-value-large">{{ current_user.puntos_totales }}</span>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters-section">
+        <div class="filters-group">
+            <a href="{{ url_for('rewards.index', categoria='todas') }}"
+                class="filter-btn {% if categoria_actual == 'todas' %}active{% endif %}">
+                {{ _('Todas') }}
+            </a>
+            {% for cat in categorias %}
+            <a href="{{ url_for('rewards.index', categoria=cat) }}"
+                class="filter-btn {% if categoria_actual == cat %}active{% endif %}">
+                {{ cat }}
+            </a>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('rewards.mis_recompensas') }}" class="btn btn-secondary">
+            {{ _('Mis Canjes') }}
+        </a>
+    </div>
+
+    <!-- Catálogo de Recompensas -->
+    <div class="rewards-grid">
+        {% for reward in recompensas %}
+        <div class="reward-card {% if reward.puntos_costo > current_user.puntos_totales %}disabled{% endif %}">
+            <div class="reward-image">
+                {% if 'cafetería' in reward.nombre.lower() or 'cafeteria' in reward.nombre.lower() %}☕
+                {% elif 'botella' in reward.nombre.lower() %}🍼
+                {% elif 'camiseta' in reward.nombre.lower() %}👕
+                {% elif 'certificado' in reward.nombre.lower() %}📜
+                {% elif 'estudio' in reward.nombre.lower() %}📚
+                {% elif 'estacionamiento' in reward.nombre.lower() %}🚗
+                {% elif 'bolsa' in reward.nombre.lower() %}🛍️
+                {% else %}🎁
+                {% endif %}
+            </div>
+            <div class="reward-content">
+                <h3 class="reward-name">{{ reward.nombre }}</h3>
+                <p class="reward-description">{{ reward.descripcion }}</p>
+                <div class="reward-footer">
+                    <div class="reward-price">
+                        <span class="price-icon">💰</span>
+                        <span class="price-value">{{ reward.puntos_costo }} pts</span>
+                    </div>
+                    <div class="reward-stock">
+                        <span class="stock-icon">📦</span>
+                        <span class="stock-value">{{ _('Stock:') }} {{ reward.stock_disponible }}</span>
+                    </div>
+                </div>
+            </div>
+            {% if reward.puntos_costo <= current_user.puntos_totales and reward.stock_disponible> 0 %}
+                <form method="POST" action="{{ url_for('rewards.canjear', reward_id=reward.id) }}"
+                    onsubmit="return confirm('¿Estás seguro de canjear {{ reward.nombre }} por {{ reward.puntos_costo }} puntos?')">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        {{ _('Canjear Ahora') }}
+                    </button>
+                </form>
+                {% elif reward.stock_disponible <= 0 %} <button class="btn btn-secondary btn-block" disabled>
+                    {{ _('Sin Stock') }}
+                    </button>
+                    {% else %}
+                    <button class="btn btn-secondary btn-block" disabled>
+                        {{ _('Puntos Insuficientes') }}
+                    </button>
+                    {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not recompensas %}
+    <div class="empty-state-large">
+        <span class="empty-icon">🎁</span>
+        <p>{{ _('No hay recompensas disponibles en esta categoría.') }}</p>
+        <a href="{{ url_for('rewards.index', categoria='todas') }}" class="btn btn-primary">{{ _('Ver Todas') }}</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

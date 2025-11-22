@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Recompensas - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">🎁</span> Gestión de Recompensas
+        </h1>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">← Volver al Dashboard</a>
+    </div>
+
+    <!-- Formulario para agregar nueva recompensa -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 class="card-title">➕ Agregar Nueva Recompensa</h2>
+        <form method="POST" action="{{ url_for('admin.crear_recompensa') }}" class="form-grid">
+            <div class="form-group">
+                <label for="nombre">Nombre de la Recompensa</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <select id="categoria" name="categoria" class="form-control" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Comida">Comida</option>
+                    <option value="Merchandising">Merchandising</option>
+                    <option value="Servicios">Servicios</option>
+                    <option value="Experiencias">Experiencias</option>
+                    <option value="Descuentos">Descuentos</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="puntos">Costo en Puntos</label>
+                <input type="number" id="puntos" name="puntos" class="form-control" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="stock">Stock Disponible</label>
+                <input type="number" id="stock" name="stock" class="form-control" min="0" required>
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    ✅ Crear Recompensa
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Lista de recompensas existentes -->
+    <div class="card">
+        <h2 class="card-title">📦 Recompensas Disponibles</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Puntos</th>
+                        <th>Stock</th>
+                        <th>Canjeadas</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recompensa in recompensas %}
+                    <tr>
+                        <td>{{ recompensa.id }}</td>
+                        <td>{{ recompensa.nombre }}</td>
+                        <td>{{ recompensa.categoria }}</td>
+                        <td>{{ recompensa.puntos_costo }}</td>
+                        <td>{{ recompensa.stock_disponible }}</td>
+                        <td>{{ recompensa.canjes.count() }}</td>
+                        <td>
+                            {% if recompensa.activo and recompensa.stock_disponible > 0 %}
+                            <span class="badge badge-success">Disponible</span>
+                            {% elif recompensa.stock_disponible == 0 %}
+                            <span class="badge badge-warning">Sin Stock</span>
+                            {% else %}
+                            <span class="badge badge-danger">Inactiva</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('admin.toggle_recompensa', recompensa_id=recompensa.id) }}"
+                                class="btn btn-sm btn-secondary">
+                                {% if recompensa.activo %}Desactivar{% else %}Activar{% endif %}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

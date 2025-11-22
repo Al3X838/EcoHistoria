@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Recompensas - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">🎁</span> Mis Recompensas Canjeadas
+        </h1>
+        <p class="page-subtitle">Historial de todos tus canjes</p>
+    </div>
+
+    <div class="card">
+        {% if canjes %}
+            <div class="my-rewards-list">
+                {% for canje in canjes %}
+                <div class="my-reward-item">
+                    <div class="reward-icon-large">
+                        {% if 'cafetería' in canje.recompensa.nombre.lower() or 'cafeteria' in canje.recompensa.nombre.lower() %}☕
+                        {% elif 'botella' in canje.recompensa.nombre.lower() %}🍼
+                        {% elif 'camiseta' in canje.recompensa.nombre.lower() %}👕
+                        {% elif 'certificado' in canje.recompensa.nombre.lower() %}📜
+                        {% elif 'estudio' in canje.recompensa.nombre.lower() %}📚
+                        {% elif 'estacionamiento' in canje.recompensa.nombre.lower() %}🚗
+                        {% else %}🎁
+                        {% endif %}
+                    </div>
+                    <div class="reward-details">
+                        <h3 class="reward-name">{{ canje.recompensa.nombre }}</h3>
+                        <p class="reward-description">{{ canje.recompensa.descripcion }}</p>
+                        <div class="reward-meta">
+                            <span class="meta-item">
+                                <span class="meta-icon">📅</span>
+                                Canjeado: {{ canje.fecha_canje.strftime('%d/%m/%Y') }}
+                            </span>
+                            <span class="meta-item">
+                                <span class="meta-icon">💰</span>
+                                Costo: {{ canje.recompensa.puntos_costo }} pts
+                            </span>
+                        </div>
+                    </div>
+                    <div class="reward-status">
+                        <span class="status-badge status-{{ canje.estado }}">
+                            {% if canje.estado == 'pendiente' %}
+                                ⏳ Pendiente
+                            {% elif canje.estado == 'entregado' %}
+                                ✅ Entregado
+                            {% elif canje.estado == 'cancelado' %}
+                                ❌ Cancelado
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state-large">
+                <span class="empty-icon">🎁</span>
+                <p>No has canjeado recompensas aún.</p>
+                <a href="{{ url_for('rewards.index') }}" class="btn btn-primary">Ver Catálogo</a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if canjes %}
+    <div class="canje-info-box">
+        <h3>📍 Cómo recoger tus recompensas</h3>
+        <ul>
+            <li>Dirígete al Punto Verde UCA (Edificio de Administración, Planta Baja)</li>
+            <li>Presenta tu carnet universitario</li>
+            <li>Horario de atención: Lunes a Viernes, 8:00 AM - 4:00 PM</li>
+            <li>Las recompensas están disponibles 48 horas después del canje</li>
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Ruleta Verde - Casino{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/casino.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container casino-game-container">
+    <div class="game-header">
+        <a href="{{ url_for('casino.index') }}" class="btn-back">← Volver al Casino</a>
+        <h1 class="game-title">🎡 Ruleta Verde</h1>
+        <div class="game-balance">
+            <span class="balance-label">Saldo:</span>
+            <span class="balance-value" id="saldo-actual">{{ current_user.puntos_totales }}</span>
+            <span class="balance-unit">pts</span>
+        </div>
+    </div>
+
+    <div class="ruleta-game">
+        <div class="ruleta-wheel-section">
+            <div class="ruleta-wheel" id="ruleta-wheel">
+                <div class="wheel-center">🌱</div>
+                <div class="wheel-ball" id="wheel-ball"></div>
+            </div>
+            <div class="resultado-display" id="resultado-display" style="display: none;">
+                <div class="resultado-numero"></div>
+                <div class="resultado-color"></div>
+            </div>
+        </div>
+
+        <div class="ruleta-controls">
+            <h3>💰 Hacer Apuesta</h3>
+            
+            <div class="form-group">
+                <label>Cantidad a apostar:</label>
+                <input type="number" id="cantidad-apuesta" class="form-control" 
+                       min="10" max="{{ (current_user.puntos_totales * 0.30)|int }}" 
+                       value="10" step="5">
+                <small class="form-hint">Mínimo: 10 pts | Máximo: {{ (current_user.puntos_totales * 0.30)|int }} pts (30% del saldo)</small>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de apuesta:</label>
+                <select id="tipo-apuesta" class="form-control">
+                    <option value="numero">Número específico (x35)</option>
+                    <option value="par">Par (x2)</option>
+                    <option value="impar">Impar (x2)</option>
+                    <option value="alto">Alto (19-36) (x2)</option>
+                    <option value="bajo">Bajo (1-18) (x2)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="numero-group">
+                <label>Número (0-36):</label>
+                <input type="number" id="numero-elegido" class="form-control" 
+                       min="0" max="36" value="7">
+            </div>
+
+            <button class="btn btn-primary btn-block btn-lg" id="btn-girar" onclick="girarRuleta()">
+                🎡 Girar Ruleta
+            </button>
+
+            <div class="game-message" id="game-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Tabla de Pagos -->
+    <div class="payouts-table">
+        <h3>📋 Tabla de Pagos</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tipo de Apuesta</th>
+                    <th>Multiplicador</th>
+                    <th>Ejemplo (100 pts)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Número específico</td>
+                    <td>x35</td>
+                    <td>3,500 pts</td>
+                </tr>
+                <tr>
+                    <td>Par / Impar</td>
+                    <td>x2</td>
+                    <td>200 pts</td>
+                </tr>
+                <tr>
+                    <td>Alto / Bajo</td>
+                    <td>x2</td>
+                    <td>200 pts</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/casino.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ruleta.js') }}"></script>
+{% endblock %}

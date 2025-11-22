@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}UCA Puntos Verdes{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="{{ url_for('main.dashboard') }}">
+                    <span class="logo">🌱</span>
+                    <span class="brand-text">UCA Verde</span>
+                </a>
+            </div>
+            
+            {% if current_user.is_authenticated %}
+            <div class="nav-menu">
+                <a href="{{ url_for('main.dashboard') }}" class="nav-link">
+                    <span>🏠</span> {{ _('Dashboard') }}
+                </a>
+                <a href="{{ url_for('recycle.index') }}" class="nav-link">
+                    <span>♻️</span> {{ _('Reciclar') }}
+                </a>
+                <a href="{{ url_for('recycle.tasks') }}" class="nav-link">
+                    <span>📚</span> {{ _('Tareas') }}
+                </a>
+                <a href="{{ url_for('rewards.index') }}" class="nav-link">
+                    <span>🎁</span> {{ _('Recompensas') }}
+                </a>
+                <a href="{{ url_for('main.rankings') }}" class="nav-link">
+                    <span>🏆</span> {{ _('Rankings') }}
+                </a>
+                <a href="{{ url_for('casino.index') }}" class="nav-link casino-link">
+                    <span>🎰</span> {{ _('Casino') }}
+                </a>
+            </div>
+            
+            <div class="nav-user">
+                 <div class="controls-container">
+                    <div class="language-selector">
+                        <a href="{{ url_for('main.set_language', lang='es') }}" class="lang-link {% if get_locale() == 'es' %}active{% endif %}">ES</a>
+                        <span>|</span>
+                        <a href="{{ url_for('main.set_language', lang='en') }}" class="lang-link {% if get_locale() == 'en' %}active{% endif %}">EN</a>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <span class="icon-sun">☀️</span>
+                        <span class="icon-moon">🌙</span>
+                    </button>
+                </div>
+
+                <div class="user-points">
+                    <span class="points-label">{{ _('Puntos:') }}</span>
+                    <span class="points-value">{{ current_user.puntos_totales }}</span>
+                </div>
+                <div class="user-dropdown">
+                    <button class="user-button">
+                        <span class="user-name">{{ current_user.nombre_completo.split()[0] }}</span>
+                        <span class="user-icon">👤</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="{{ url_for('main.profile') }}" class="dropdown-item">
+                            <span>👤</span> {{ _('Mi Perfil') }}
+                        </a>
+                        {% if current_user.is_admin %}
+                        <a href="{{ url_for('admin.dashboard') }}" class="dropdown-item">
+                            <span>⚙️</span> {{ _('Admin') }}
+                        </a>
+                        {% endif %}
+                        <hr class="dropdown-divider">
+                        <a href="{{ url_for('auth.logout') }}" class="dropdown-item logout">
+                            <span>🚪</span> {{ _('Cerrar Sesión') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Mensajes Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <span class="alert-icon">
+                    {% if category == 'success' %}✅
+                    {% elif category == 'danger' %}❌
+                    {% elif category == 'warning' %}⚠️
+                    {% else %}ℹ️{% endif %}
+                </span>
+                <span class="alert-message">{{ message }}</span>
+                <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🌱 UCA Verde</h3>
+                    <p>{{ _('Sistema de puntos por reciclaje') }}</p>
+                    <p class="footer-tagline">{{ _('Juntos por un campus sostenible') }}</p>
+                </div>
+                <div class="footer-section">
+                    <h4>{{ _('Enlaces') }}</h4>
+                    <ul>
+                        <li><a href="{{ url_for('main.dashboard') }}">{{ _('Dashboard') }}</a></li>
+                        <li><a href="{{ url_for('recycle.index') }}">{{ _('Reciclar') }}</a></li>
+                        <li><a href="{{ url_for('rewards.index') }}">{{ _('Recompensas') }}</a></li>
+                        <li><a href="{{ url_for('main.rankings') }}">{{ _('Rankings') }}</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>{{ _('Contacto') }}</h4>
+                    <p>📧 verde@uca.edu.sv</p>
+                    <p>📞 +503 2210-6600</p>
+                    <p>📍 Universidad Centroamericana José Simeón Cañas</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2_025 UCA Puntos Verdes. {{ _('Todos los derechos reservados.') }}</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

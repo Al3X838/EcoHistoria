@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container admin-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">⚙️</span> Panel de Administración
+        </h1>
+        <p class="page-subtitle">Gestión del sistema UCA Verde</p>
+    </div>
+
+    <!-- Estadísticas Globales -->
+    <div class="stats-grid">
+        <div class="stat-card primary">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ stats.total_usuarios }}</h3>
+                <p class="stat-label">Usuarios Registrados</p>
+            </div>
+        </div>
+
+        <div class="stat-card success">
+            <div class="stat-icon">💚</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ stats.total_puntos }}</h3>
+                <p class="stat-label">Puntos Generados</p>
+            </div>
+        </div>
+
+        <div class="stat-card warning">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ stats.total_transacciones }}</h3>
+                <p class="stat-label">Transacciones</p>
+            </div>
+        </div>
+
+        <div class="stat-card info">
+            <div class="stat-icon">🌍</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ stats.co2_evitado }} kg</h3>
+                <p class="stat-label">CO₂ Evitado</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegación de Admin -->
+    <div class="admin-nav">
+        <a href="{{ url_for('admin.materiales') }}" class="admin-nav-card">
+            <div class="nav-icon">♻️</div>
+            <h3>Gestionar Materiales</h3>
+            <p>Agregar, editar o desactivar materiales reciclables</p>
+        </a>
+
+        <a href="{{ url_for('admin.recompensas') }}" class="admin-nav-card">
+            <div class="nav-icon">🎁</div>
+            <h3>Gestionar Recompensas</h3>
+            <p>Administrar catálogo de recompensas y stock</p>
+        </a>
+
+        <a href="{{ url_for('admin.usuarios') }}" class="admin-nav-card">
+            <div class="nav-icon">👥</div>
+            <h3>Gestionar Usuarios</h3>
+            <p>Ver y administrar cuentas de usuarios</p>
+        </a>
+    </div>
+
+    <!-- Usuarios Recientes -->
+    <div class="card">
+        <h2 class="card-title">👥 Usuarios Registrados Recientemente</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Facultad</th>
+                        <th>Puntos</th>
+                        <th>Fecha Registro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in usuarios_recientes %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.nombre_completo }}</td>
+                        <td>{{ user.facultad }}</td>
+                        <td>{{ user.puntos_totales }}</td>
+                        <td>{{ user.fecha_registro.strftime('%d/%m/%Y') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Transacciones Recientes -->
+    <div class="card">
+        <h2 class="card-title">📊 Transacciones Recientes</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Puntos</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trans in transacciones_recientes %}
+                    <tr>
+                        <td>{{ trans.usuario.username }}</td>
+                        <td>
+                            <span class="badge badge-{{ trans.tipo }}">{{ trans.tipo }}</span>
+                        </td>
+                        <td>{{ trans.descripcion }}</td>
+                        <td class="{% if trans.puntos > 0 %}text-success{% else %}text-danger{% endif %}">
+                            {{ '+' if trans.puntos > 0 else '' }}{{ trans.puntos }}
+                        </td>
+                        <td>{{ trans.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Slots Ecológicos - Casino{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/casino.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container casino-game-container">
+    <div class="game-header">
+        <a href="{{ url_for('casino.index') }}" class="btn-back">← Volver al Casino</a>
+        <h1 class="game-title">🎰 Slots Ecológicos</h1>
+        <div class="game-balance">
+            <span class="balance-label">Saldo:</span>
+            <span class="balance-value" id="saldo-actual">{{ current_user.puntos_totales }}</span>
+            <span class="balance-unit">pts</span>
+        </div>
+    </div>
+
+    <div class="slots-game">
+        <div class="slots-machine">
+            <div class="slots-header">
+                <h2 class="slots-title">🌱 ECO SLOTS 🌱</h2>
+            </div>
+            
+            <div class="slots-reels">
+                <div class="reel" id="reel-1">
+                    <div class="reel-symbol">🌱</div>
+                </div>
+                <div class="reel" id="reel-2">
+                    <div class="reel-symbol">🌿</div>
+                </div>
+                <div class="reel" id="reel-3">
+                    <div class="reel-symbol">🍃</div>
+                </div>
+            </div>
+
+            <div class="slots-controls">
+                <div class="form-group">
+                    <label>Apuesta:</label>
+                    <input type="number" id="cantidad-apuesta" class="form-control" 
+                           min="10" max="{{ (current_user.puntos_totales * 0.30)|int }}" 
+                           value="10" step="5">
+                    <small class="form-hint">Mín: 10 | Máx: {{ (current_user.puntos_totales * 0.30)|int }} pts</small>
+                </div>
+
+                <button class="btn btn-primary btn-block btn-lg" id="btn-girar" onclick="girarSlots()">
+                    🎰 GIRAR
+                </button>
+
+                <div class="game-message" id="game-message" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Tabla de Pagos -->
+        <div class="payouts-slots">
+            <h3>💰 Tabla de Premios</h3>
+            <div class="payout-list">
+                <div class="payout-item jackpot">
+                    <span class="payout-combo">♻️ ♻️ ♻️</span>
+                    <span class="payout-multi">JACKPOT x50</span>
+                </div>
+                <div class="payout-item">
+                    <span class="payout-combo">🌱 🌱 🌱</span>
+                    <span class="payout-multi">x10</span>
+                </div>
+                <div class="payout-item">
+                    <span class="payout-combo">Cualquier 3 iguales</span>
+                    <span class="payout-multi">x10</span>
+                </div>
+                <div class="payout-item">
+                    <span class="payout-combo">2 símbolos iguales</span>
+                    <span class="payout-multi">x3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/slots.js') }}"></script>
+<script src="{{ url_for('static', filename='js/casino.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Casino Verde - UCA Verde{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/casino.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container casino-container">
+    <div class="page-header casino-header">
+        <h1 class="page-title">
+            <span class="icon">🎰</span> Casino Verde
+        </h1>
+        <p class="page-subtitle">Prueba tu suerte y multiplica tus puntos</p>
+        <div class="casino-balance">
+            <span class="balance-label">Tu saldo:</span>
+            <span class="balance-value">{{ current_user.puntos_totales }} pts</span>
+        </div>
+    </div>
+
+    <!-- Advertencia de Juego Responsable -->
+    <div class="responsible-gaming-warning">
+        <span class="warning-icon">⚠️</span>
+        <div class="warning-content">
+            <strong>Juega Responsablemente:</strong>
+            <p>Solo puedes apostar hasta el 30% de tu saldo. Los puntos apostados son reales. 
+            El casino es solo para entretenimiento y no garantiza ganancias.</p>
+        </div>
+    </div>
+
+    <!-- Juegos Disponibles -->
+    <div class="games-grid">
+        <a href="{{ url_for('casino.ruleta') }}" class="game-card ruleta">
+            <div class="game-icon">🎡</div>
+            <h2 class="game-title">Ruleta Verde</h2>
+            <p class="game-description">Apuesta a números, colores o grupos. Multiplicadores hasta x35.</p>
+            <div class="game-features">
+                <span class="feature">🎯 Números 0-36</span>
+                <span class="feature">🔴 Rojo/Verde</span>
+                <span class="feature">📊 Par/Impar</span>
+            </div>
+            <div class="btn btn-primary btn-block">Jugar Ruleta</div>
+        </a>
+
+        <a href="{{ url_for('casino.slots') }}" class="game-card slots">
+            <div class="game-icon">🎰</div>
+            <h2 class="game-title">Slots Ecológicos</h2>
+            <p class="game-description">Gira 3 rodillos con símbolos verdes. ¡Jackpot x50!</p>
+            <div class="game-features">
+                <span class="feature">🌱 Símbolos Verdes</span>
+                <span class="feature">💰 Jackpot x50</span>
+                <span class="feature">✨ Animaciones</span>
+            </div>
+            <div class="btn btn-primary btn-block">Jugar Slots</div>
+        </a>
+
+        <a href="{{ url_for('casino.dados') }}" class="game-card dados">
+            <div class="game-icon">🎲</div>
+            <h2 class="game-title">Dados Verdes</h2>
+            <p class="game-description">Lanza 2 dados y apuesta al resultado. Múltiples opciones.</p>
+            <div class="game-features">
+                <span class="feature">🎲 2 Dados</span>
+                <span class="feature">🎯 Suma Exacta</span>
+                <span class="feature">🔥 Dobles x8</span>
+            </div>
+            <div class="btn btn-primary btn-block">Jugar Dados</div>
+        </a>
+    </div>
+
+    <!-- Estadísticas del Jugador -->
+    <div class="casino-stats">
+        <h2 class="section-title">📊 Tus Estadísticas</h2>
+        <div class="stats-cards">
+            <div class="stat-card-casino">
+                <div class="stat-icon">💸</div>
+                <div class="stat-value">{{ total_apostado }}</div>
+                <div class="stat-label">Total Apostado</div>
+            </div>
+            <div class="stat-card-casino">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value">{{ total_ganado }}</div>
+                <div class="stat-label">Total Ganado</div>
+            </div>
+            <div class="stat-card-casino {% if total_ganado - total_apostado >= 0 %}positive{% else %}negative{% endif %}">
+                <div class="stat-icon">📈</div>
+                <div class="stat-value">{{ total_ganado - total_apostado }}</div>
+                <div class="stat-label">Balance Neto</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial de Juegos -->
+    <div class="casino-history">
+        <h2 class="section-title">🎮 Historial Reciente</h2>
+        {% if juegos %}
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Juego</th>
+                            <th>Fecha</th>
+                            <th>Apuesta</th>
+                            <th>Resultado</th>
+                            <th>Ganancia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for juego in juegos %}
+                        <tr>
+                            <td>
+                                {% if juego.tipo_juego == 'ruleta' %}🎡 Ruleta
+                                {% elif juego.tipo_juego == 'slots' %}🎰 Slots
+                                {% elif juego.tipo_juego == 'dados' %}🎲 Dados
+                                {% endif %}
+                            </td>
+                            <td>{{ juego.fecha.strftime('%d/%m %H:%M') }}</td>
+                            <td>{{ juego.apuesta }} pts</td>
+                            <td>{{ juego.resultado }}</td>
+                            <td class="{% if juego.ganancia > 0 %}text-success{% elif juego.ganancia < 0 %}text-danger{% endif %}">
+                                {{ '+' if juego.ganancia > 0 else '' }}{{ juego.ganancia }} pts
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No has jugado aún. ¡Empieza ahora! 🎰</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

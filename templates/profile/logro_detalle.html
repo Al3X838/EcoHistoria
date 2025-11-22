@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ logro.nombre }} - Logro UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container logro-detalle-container">
+    <div class="card logro-card-detalle">
+        <div class="logro-icon-detalle">{{ logro.icono }}</div>
+        <h1 class="logro-nombre-detalle">{{ logro.nombre }}</h1>
+        <p class="logro-descripcion-detalle">{{ logro.descripcion }}</p>
+        <div class="logro-categoria-detalle">{{ logro.categoria }}</div>
+
+        <hr class="logro-divider">
+
+        <h3 class="share-title">¡Comparte tu logro!</h3>
+        <div class="share-buttons">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank"
+                class="share-btn facebook">
+                <span>📘</span> Facebook
+            </a>
+            <a href="https://twitter.com/intent/tweet?url={{ request.url }}&text=¡He desbloqueado el logro '{{ logro.nombre }}' en UCA Puntos Verdes! 🌱"
+                target="_blank" class="share-btn twitter">
+                <span>🐦</span> Twitter
+            </a>
+            <a href="whatsapp://send?text=¡He desbloqueado el logro '{{ logro.nombre }}' en UCA Puntos Verdes! 🌱 {{ request.url }}"
+                data-action="share/whatsapp/share" class="share-btn whatsapp">
+                <span>💬</span> WhatsApp
+            </a>
+            <button onclick="copyToClipboard()" class="share-btn copy-link"
+                style="background-color: #6b7280; border: none; cursor: pointer;">
+                <span>🔗</span> Copiar Enlace
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function copyToClipboard() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            if (typeof showMessage === 'function') {
+                showMessage('¡Enlace copiado al portapapeles!', 'success');
+            } else {
+                alert('¡Enlace copiado!');
+            }
+        }).catch(err => {
+            console.error('Error al copiar:', err);
+            alert('No se pudo copiar el enlace');
+        });
+    }
+</script>
+{% endblock %}

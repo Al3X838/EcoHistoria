@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ quiz.titulo }} - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1 class="quiz-title">{{ quiz.titulo }}</h1>
+            <p class="quiz-category">Categoría: {{ quiz.categoria }}</p>
+            <div class="quiz-reward">
+                <span class="reward-icon">💰</span>
+                <span class="reward-text">Recompensa: {{ quiz.puntos_recompensa }} puntos</span>
+            </div>
+        </div>
+
+        <div class="quiz-card">
+            <div class="quiz-instructions">
+                <h3>📋 Instrucciones</h3>
+                <ul>
+                    <li>Lee cada pregunta cuidadosamente</li>
+                    <li>Selecciona la respuesta correcta</li>
+                    <li>Debes responder TODAS las preguntas correctamente para ganar puntos</li>
+                    <li>Solo puedes completar cada quiz una vez</li>
+                </ul>
+            </div>
+
+            <form method="POST" class="quiz-form">
+                {% for pregunta in preguntas %}
+                <div class="quiz-question">
+                    <h4 class="question-title">
+                        <span class="question-number">Pregunta {{ loop.index }}</span>
+                        {{ pregunta.pregunta }}
+                    </h4>
+                    <div class="question-options">
+                        {% for opcion in pregunta.opciones_lista %}
+                        <label class="option-label">
+                            <input type="radio" name="pregunta_{{ pregunta.id }}" value="{{ loop.index0 }}" required>
+                            <span class="option-text">{{ opcion }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="quiz-actions">
+                    <a href="{{ url_for('recycle.tasks') }}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Enviar Respuestas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
