@@ -3,8 +3,6 @@ from flask_login import login_required, current_user
 from functools import wraps
 from models import db, Material, Reward, User, Transaction
 from utils import estadisticas_globales
-from forms import AjustarPuntosForm # Asegúrate de importar el nuevo form
-from models import User, Transaction # Asegúrate de importar User y Transaction
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -295,65 +293,6 @@ def eliminar_recompensa(recompensa_id):
 @login_required
 @admin_required
 def usuarios():
-    """Gestión de usuarios (Lista)"""
-    # Listamos todos los usuarios no administradores
-    usuarios = User.query.filter_by(is_admin=False).order_by(User.id.desc()).all()
+    """Gestión de usuarios"""
+    usuarios = User.query.filter_by(is_admin=False).all()
     return render_template('admin/users.html', usuarios=usuarios)
-
-@admin_bp.route('/usuario/<int:user_id>', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def ver_usuario(user_id):
-    """
-    Ver detalle de usuario y Gestionar Cuenta (RF023 Ajustar Puntos)
-    """
-    user = User.query.get_or_404(user_id)
-    form = AjustarPuntosForm()
-
-    # Lógica RF023: Ajustar Puntos
-    if form.validate_on_submit():
-        cantidad = form.puntos.data
-        justificacion = form.justificacion.data
-        
-        # Usamos el método existente agregar_puntos que ya maneja transacciones
-        # Si la cantidad es negativa, restará puntos automáticamente.
-        user.agregar_puntos(
-            cantidad, 
-            'ajuste_admin', 
-            f"Ajuste manual Admin: {justificacion}"
-        )
-        
-        db.session.commit()
-        flash(f'Se han ajustado {cantidad} puntos al usuario {user.username}.', 'success')
-        return redirect(url_for('admin.ver_usuario', user_id=user.id))
-
-    # Obtener historial reciente del usuario para contexto
-    transacciones = Transaction.query.filter_by(user_id=user.id)\
-        .order_by(Transaction.fecha.desc()).limit(10).all()
-
-    return render_template('admin/user_detail.html', 
-                         user=user, 
-                         form=form, 
-                         transacciones=transacciones)
-
-@admin_bp.route('/usuario/toggle/<int:user_id>', methods=['POST'])
-@login_required
-@admin_required
-def toggle_usuario(user_id):
-    """
-    RF024: Desactivar/Activar Cuenta
-    """
-    user = User.query.get_or_404(user_id)
-    
-    # No permitir desactivarse a sí mismo si fuera el caso
-    if user.id == current_user.id:
-        flash('No puedes desactivar tu propia cuenta.', 'danger')
-        return redirect(url_for('admin.usuarios'))
-
-    user.activo = not user.activo
-    db.session.commit()
-    
-    estado = 'activada' if user.activo else 'desactivada'
-    flash(f'La cuenta de {user.username} ha sido {estado}.', 'success')
-    
-    return redirect(url_for('admin.ver_usuario', user_id=user.id))

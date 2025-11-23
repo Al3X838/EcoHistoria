@@ -75,12 +75,3 @@ class ApuestaForm(FlaskForm):
     """Formulario de Apuesta Casino"""
     cantidad = IntegerField(_l('Cantidad de Puntos'), validators=[DataRequired(), NumberRange(min=10)])
     submit = SubmitField(_l('Apostar'))
-
-
-
-
-class AjustarPuntosForm(FlaskForm):
-    """Formulario para ajuste manual de puntos por Admin (RF023)"""
-    puntos = IntegerField('Puntos (positivo para sumar, negativo para restar)', validators=[DataRequired()])
-    justificacion = TextAreaField('Justificación del ajuste', validators=[DataRequired()])
-    submit = SubmitField('Aplicar Ajuste')
