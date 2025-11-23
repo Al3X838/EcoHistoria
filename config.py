@@ -32,12 +32,3 @@ class Config:
     
     # Idiomas soportados
     LANGUAGES = ['es', 'en']
-
-    # --- CONFIGURACIÓN DE CORREO (GMAIL) ---
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USE_SSL = False
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'ecopuntosuca@gmail.com'
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'gwja xkba txgp esvh'
-    MAIL_DEFAULT_SENDER = ('EcoPuntos UCA', MAIL_USERNAME)
