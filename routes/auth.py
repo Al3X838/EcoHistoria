@@ -83,9 +83,6 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         
         if user and user.check_password(form.password.data):
-            if not user.activo:
-                flash(_('Tu cuenta está desactivada. Contacta al administrador.'), 'warning')
-                return redirect(url_for('auth.login'))
             login_user(user)
             misiones_completadas = actualizar_progreso_mision(user, 'login')
             for mision in misiones_completadas:
