@@ -1,9 +1,11 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request
+from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from flask_login import login_required, current_user
-from models import Transaction, UserAchievement, Achievement, UserMision
+from models import Transaction, UserAchievement, Achievement, UserMision, db
 from utils import calcular_impacto_ambiental, obtener_ranking_estudiantes, estadisticas_globales, asignar_misiones
 from config import Config
 from datetime import date, timedelta
+from forms import RegistroForm, LoginForm, RequestResetForm, ResetPasswordForm, ChangePasswordForm
+from flask_babel import gettext as _
 
 main_bp = Blueprint('main', __name__)
 
@@ -97,37 +99,49 @@ def dashboard():
                          misiones_activas=misiones_activas)
 
 
-@main_bp.route('/profile')
+@main_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    """Perfil del usuario"""
-    # Todas las transacciones
-    transacciones = Transaction.query.filter_by(user_id=current_user.id)\
-        .order_by(Transaction.fecha.desc())\
-        .all()
+    # --- 1. LÓGICA DE CAMBIO DE CONTRASEÑA ---
+    form = ChangePasswordForm()
     
-    # Todos los logros
+    if form.validate_on_submit():
+        if not current_user.check_password(form.current_password.data):
+            flash(_('La contraseña actual es incorrecta.'), 'danger')
+        else:
+            current_user.set_password(form.new_password.data)
+            db.session.commit()
+            flash(_('¡Tu contraseña ha sido actualizada exitosamente!'), 'success')
+            return redirect(url_for('main.profile'))
+
+    # --- 2. LÓGICA DE DATOS DEL PERFIL ---
+    transacciones = Transaction.query.filter_by(user_id=current_user.id)\
+        .order_by(Transaction.fecha.desc()).all()
+    
     logros_obtenidos = UserAchievement.query.filter_by(user_id=current_user.id).all()
     logros_ids = [l.achievement_id for l in logros_obtenidos]
     todos_logros = Achievement.query.all()
     
-    # Impacto ambiental
-    impacto = calcular_impacto_ambiental(current_user.id)
+    try:
+        impacto = calcular_impacto_ambiental(current_user.id)
+    except Exception:
+        impacto = {'co2': 0, 'agua': 0, 'energia': 0}
     
-    # Estadísticas
     total_reciclajes = Transaction.query.filter_by(user_id=current_user.id, tipo='reciclaje').count()
     total_quizzes = Transaction.query.filter_by(user_id=current_user.id, tipo='quiz').count()
     total_canjes = Transaction.query.filter_by(user_id=current_user.id, tipo='canje').count()
     
-    return render_template('profile/profile.html',
-                         transacciones=transacciones,
-                         todos_logros=todos_logros,
-                         logros_obtenidos=logros_ids,
-                         impacto=impacto,
-                         total_reciclajes=total_reciclajes,
-                         total_quizzes=total_quizzes,
-                         total_canjes=total_canjes)
-
+    return render_template('profile/profile.html', 
+                           title=_('Mi Perfil'), 
+                           form=form,
+                           transacciones=transacciones,
+                           todos_logros=todos_logros,
+                           logros_obtenidos=logros_ids,
+                           impacto=impacto,
+                           total_reciclajes=total_reciclajes,
+                           total_quizzes=total_quizzes,
+                           total_canjes=total_canjes)
+    
 
 @main_bp.route('/rankings')
 @login_required

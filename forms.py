@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField, TextAreaField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, NumberRange
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, NumberRange, Length
 from models import User
 from flask_babel import lazy_gettext as _l
 
@@ -75,3 +75,9 @@ class ApuestaForm(FlaskForm):
     """Formulario de Apuesta Casino"""
     cantidad = IntegerField(_l('Cantidad de Puntos'), validators=[DataRequired(), NumberRange(min=10)])
     submit = SubmitField(_l('Apostar'))
+
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField(_l('Contraseña Actual'), validators=[DataRequired()])
+    new_password = PasswordField(_l('Nueva Contraseña'), validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField(_l('Confirmar Nueva Contraseña'), validators=[DataRequired(), EqualTo('new_password')])
+    submit = SubmitField(_l('Actualizar Contraseña'))
