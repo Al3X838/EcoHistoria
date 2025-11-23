@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_styles.css') }}">
+{% endblock %}
+
 {% block title %}Gestionar Recompensas - Admin{% endblock %}
 
 {% block content %}
@@ -96,6 +100,27 @@
                                 class="btn btn-sm btn-secondary">
                                 {% if recompensa.activo %}Desactivar{% else %}Activar{% endif %}
                             </a>
+
+                            <a href="{{ url_for('admin.editar_recompensa', recompensa_id=recompensa.id) }}"
+                                class="btn btn-sm btn-primary">
+                                ✏️ Editar
+                            </a>
+
+                            {% if recompensa.canjes.count() > 0 %}
+                            <button class="btn btn-sm btn-danger" disabled
+                                title="No se puede eliminar: ya ha sido canjeada {{ recompensa.canjes.count() }} veces">
+                                🗑️ Eliminar
+                            </button>
+                            {% else %}
+                            <form method="POST"
+                                action="{{ url_for('admin.eliminar_recompensa', recompensa_id=recompensa.id) }}"
+                                style="display: inline;"
+                                onsubmit="return confirm('¿Estás seguro de eliminar la recompensa {{ recompensa.nombre }}?');">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    🗑️ Eliminar
+                                </button>
+                            </form>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
