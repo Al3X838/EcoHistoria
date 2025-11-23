@@ -156,6 +156,89 @@
             <p class="empty-state">No tienes transacciones registradas aún.</p>
             {% endif %}
         </div>
+<<<<<<< HEAD
     </div>
 </div>
+=======
+    </div> <!-- Cierre de profile-grid -->
+
+    <!-- 👇 SECCIÓN DE SEGURIDAD (V11 - SIN EMOJIS Y CENTRADO REAL) 👇 -->
+    <div class="row" style="margin-top: 3rem; margin-bottom: 3rem;">
+        <div class="col-md-8 offset-md-2">
+            <div class="card" style="background: linear-gradient(145deg, #1f2937, #111827); border: 1px solid #374151; border-radius: 20px; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4); overflow: hidden;">
+                
+                <!-- Barra decorativa -->
+                <div style="height: 6px; background: linear-gradient(90deg, #10b981, #047857);"></div>
+
+                <!-- Encabezado -->
+                <div class="card-header" style="border: none; background: transparent; padding-top: 2rem; text-align: center;">
+                    <h3 style="color: #10b981; font-weight: 800; font-size: 1.6rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <span>🔒</span> {{ _('Zona de Seguridad') }}
+                    </h3>
+                    <p style="color: #9ca3af; font-size: 0.9rem; margin: 0;">
+                        {{ _('Mantén tu cuenta segura cambiando tu contraseña periódicamente.') }}
+                    </p>
+                </div>
+
+                <div class="card-body" style="padding: 2rem;">
+                    <form method="POST" style="max-width: 500px; margin: 0 auto;">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Contraseña Actual (SIN EMOJIS) -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <label class="form-label" style="color: #d1fae5; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; display: block;">
+                                {{ form.current_password.label }}
+                            </label>
+                            {% if form.current_password.errors %}
+                                {{ form.current_password(class="form-control is-invalid", style="background-color: #111827; border: 1px solid #ef4444; color: white; padding: 12px; border-radius: 10px; width: 100%; box-sizing: border-box;") }}
+                                <div style="color: #ef4444; margin-top: 5px; font-size: 0.85rem;">
+                                    {{ form.current_password.errors[0] }}
+                                </div>
+                            {% else %}
+                                {{ form.current_password(class="form-control", style="background-color: #111827; border: 1px solid #374151; color: white; padding: 12px; border-radius: 10px; width: 100%; box-sizing: border-box;") }}
+                            {% endif %}
+                        </div>
+
+                        <!-- Nueva Contraseña (SIN EMOJIS) -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <label class="form-label" style="color: #d1fae5; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; display: block;">
+                                {{ form.new_password.label }}
+                            </label>
+                            {% if form.new_password.errors %}
+                                {{ form.new_password(class="form-control is-invalid", style="background-color: #111827; border: 1px solid #ef4444; color: white; padding: 12px; border-radius: 10px; width: 100%; box-sizing: border-box;") }}
+                                <div style="color: #ef4444; margin-top: 5px; font-size: 0.85rem;">
+                                    {{ form.new_password.errors[0] }}
+                                </div>
+                            {% else %}
+                                {{ form.new_password(class="form-control", style="background-color: #111827; border: 1px solid #374151; color: white; padding: 12px; border-radius: 10px; width: 100%; box-sizing: border-box;") }}
+                            {% endif %}
+                        </div>
+
+                        <!-- Confirmar Contraseña (SIN EMOJIS) -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <label class="form-label" style="color: #d1fae5; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; display: block;">
+                                {{ form.confirm_password.label }}
+                            </label>
+                            {% if form.confirm_password.errors %}
+                                {{ form.confirm_password(class="form-control is-invalid", style="background-color: #111827; border: 1px solid #ef4444; color: white; padding: 12px; border-radius: 10px; width: 100%; box-sizing: border-box;") }}
+                                <div style="color: #ef4444; margin-top: 5px; font-size: 0.85rem;">
+                                    {{ form.confirm_password.errors[0] }}
+                                </div>
+                            {% else %}
+                                {{ form.confirm_password(class="form-control", style="background-color: #111827; border: 1px solid #374151; color: white; padding: 12px; border-radius: 10px; width: 100%; box-sizing: border-box;") }}
+                            {% endif %}
+                        </div>
+
+                        <!-- Botón Centrado y Separado -->
+                        <div style="text-align: center; margin-top: 2.5rem;">
+                            {{ form.submit(class="btn", style="background: linear-gradient(90deg, #10b981, #059669); border: none; border-radius: 50px; padding: 12px 40px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); transition: transform 0.2s; display: inline-block; cursor: pointer;") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div> <!-- Cierre de container -->
+>>>>>>> origin/Asad
 {% endblock %}

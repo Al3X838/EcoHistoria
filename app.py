@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, session
 from flask_babel import Babel
 from flask_login import LoginManager
+<<<<<<< HEAD
+=======
+from flask_mail import Mail
+>>>>>>> origin/Asad
 from config import Config
 from models import db, User
 from utils import inject_csrf_token
@@ -82,3 +86,7 @@ def create_app(config_class=Config):
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True, host='0.0.0.0', port=5000)
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Asad
