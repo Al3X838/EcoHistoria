@@ -24,58 +24,66 @@ document.addEventListener('DOMContentLoaded', function() {
         applyTheme('dark');
     }
 
-    // Evento del botón
-    themeToggle.addEventListener('click', () => {
-        const isDark = body.classList.contains('dark-mode');
-        if (isDark) {
-            applyTheme('light');
-            localStorage.setItem('theme', 'light');
-        } else {
-            applyTheme('dark');
-            localStorage.setItem('theme', 'dark');
-        }
-    });
+    // --- CORRECCIÓN AQUÍ: Validamos si el botón existe antes de usarlo ---
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains('dark-mode');
+            if (isDark) {
+                applyTheme('light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                applyTheme('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    }
 
     // Auto-cerrar alertas después de 5 segundos
     const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(alert => {
-        setTimeout(() => {
-            alert.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => alert.remove(), 300);
-        }, 5000);
-    });
+    if (alerts.length > 0) {
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        });
+    }
     
     // Confirmar acciones importantes
     const confirmButtons = document.querySelectorAll('[data-confirm]');
-    confirmButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            const message = this.getAttribute('data-confirm');
-            if (!confirm(message)) {
-                e.preventDefault();
-            }
+    if (confirmButtons.length > 0) {
+        confirmButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const message = this.getAttribute('data-confirm');
+                if (!confirm(message)) {
+                    e.preventDefault();
+                }
+            });
         });
-    });
+    }
     
     // Tooltips simples
     const tooltips = document.querySelectorAll('[data-tooltip]');
-    tooltips.forEach(element => {
-        element.addEventListener('mouseenter', function() {
-            const text = this.getAttribute('data-tooltip');
-            const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            tooltip.textContent = text;
-            document.body.appendChild(tooltip);
+    if (tooltips.length > 0) {
+        tooltips.forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                const text = this.getAttribute('data-tooltip');
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.textContent = text;
+                document.body.appendChild(tooltip);
+                
+                const rect = this.getBoundingClientRect();
+                tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+                tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+            });
             
-            const rect = this.getBoundingClientRect();
-            tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
-            tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+            element.addEventListener('mouseleave', function() {
+                const tooltip = document.querySelector('.tooltip');
+                if (tooltip) tooltip.remove();
+            });
         });
-        
-        element.addEventListener('mouseleave', function() {
-            const tooltip = document.querySelector('.tooltip');
-            if (tooltip) tooltip.remove();
-        });
-    });
+    }
 });
 
 // Función para formatear números con comas
@@ -140,24 +148,3 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
-// Menú de Usuario
-function toggleUserMenu(event) {
-    event.stopPropagation();
-    const menu = document.getElementById('userDropdown');
-    const button = event.currentTarget;
-    
-    menu.classList.toggle('show');
-    button.classList.toggle('active');
-}
-
-// Cerrar menú al hacer click fuera
-document.addEventListener('click', function(event) {
-    const menu = document.getElementById('userDropdown');
-    const button = document.querySelector('.user-button');
-    
-    if (menu && menu.classList.contains('show') && !menu.contains(event.target) && !button.contains(event.target)) {
-        menu.classList.remove('show');
-        button.classList.remove('active');
-    }
-});

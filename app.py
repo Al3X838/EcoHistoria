@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, session
 from flask_babel import Babel
 from flask_login import LoginManager
+# 1. ### NUEVO: Importar Mail ###
+from flask_mail import Mail
 from config import Config
 from models import db, User
 from utils import inject_csrf_token
@@ -8,6 +10,9 @@ import os
 import traceback
 
 babel = Babel()
+
+# 2. ### NUEVO: Crear la "caja" de correo vacía (instancia) ###
+mail = Mail()
 
 def create_app(config_class=Config):
     """Factory para crear la aplicación Flask"""
@@ -25,6 +30,9 @@ def create_app(config_class=Config):
     # Inicializar extensiones
     babel.init_app(app, locale_selector=get_locale)
     db.init_app(app)
+
+    # 3. ### NUEVO: Conectar el correo a la App ###
+    mail.init_app(app)
     
     # Configurar Flask-Login
     login_manager = LoginManager()
