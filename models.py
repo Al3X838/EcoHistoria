@@ -27,6 +27,9 @@ class User(UserMixin, db.Model):
     ultima_actividad = db.Column(db.DateTime, default=get_current_time)
     fecha_registro = db.Column(db.DateTime, default=get_current_time)
     is_admin = db.Column(db.Boolean, default=False)
+    activo = db.Column(db.Boolean, default=True)
+
+
     
     # Relaciones
     transacciones = db.relationship('Transaction', backref='usuario', lazy='dynamic')
@@ -35,6 +38,10 @@ class User(UserMixin, db.Model):
     juegos_casino = db.relationship('CasinoGame', backref='jugador', lazy='dynamic')
     quizzes_completados = db.relationship('UserQuiz', backref='estudiante', lazy='dynamic')
     misiones = db.relationship('UserMision', backref='usuario', lazy='dynamic')
+    
+    @property
+    def is_active(self):
+        return self.activo
     
     def set_password(self, password):
         """Hashear contraseña"""
@@ -316,3 +323,4 @@ class UserMision(db.Model):
 
     def __repr__(self):
         return f'<UserMision user={self.user_id} mision={self.mision_id}>'
+
