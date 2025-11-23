@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ get_locale() }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{% block title %}UCA Puntos Verdes{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=10">
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
     <!-- Navegación -->
     <nav class="navbar">
@@ -18,7 +20,7 @@
                     <span class="brand-text">UCA Verde</span>
                 </a>
             </div>
-            
+
             {% if current_user.is_authenticated %}
             <div class="nav-menu">
                 <a href="{{ url_for('main.dashboard') }}" class="nav-link">
@@ -40,13 +42,15 @@
                     <span>🎰</span> {{ _('Casino') }}
                 </a>
             </div>
-            
+
             <div class="nav-user">
-                 <div class="controls-container">
+                <div class="controls-container">
                     <div class="language-selector">
-                        <a href="{{ url_for('main.set_language', lang='es') }}" class="lang-link {% if get_locale() == 'es' %}active{% endif %}">ES</a>
+                        <a href="{{ url_for('main.set_language', lang='es') }}"
+                            class="lang-link {% if get_locale() == 'es' %}active{% endif %}">ES</a>
                         <span>|</span>
-                        <a href="{{ url_for('main.set_language', lang='en') }}" class="lang-link {% if get_locale() == 'en' %}active{% endif %}">EN</a>
+                        <a href="{{ url_for('main.set_language', lang='en') }}"
+                            class="lang-link {% if get_locale() == 'en' %}active{% endif %}">EN</a>
                     </div>
                     <button id="theme-toggle" class="theme-toggle">
                         <span class="icon-sun">☀️</span>
@@ -59,11 +63,15 @@
                     <span class="points-value">{{ current_user.puntos_totales }}</span>
                 </div>
                 <div class="user-dropdown">
-                    <button class="user-button">
-                        <span class="user-name">{{ current_user.nombre_completo.split()[0] }}</span>
+                    <button class="user-button" onclick="toggleUserMenu(event)">
                         <span class="user-icon">👤</span>
+                        <span class="user-name">{{ current_user.nombre_completo.split()[0] }}</span>
+                        <span class="chevron-icon">▼</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="userDropdown">
+                        <div class="dropdown-header">
+                            <span class="user-role">{{ current_user.nivel }}</span>
+                        </div>
                         <a href="{{ url_for('main.profile') }}" class="dropdown-item">
                             <span>👤</span> {{ _('Mi Perfil') }}
                         </a>
@@ -85,22 +93,22 @@
 
     <!-- Mensajes Flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="flash-container">
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">
-                <span class="alert-icon">
-                    {% if category == 'success' %}✅
-                    {% elif category == 'danger' %}❌
-                    {% elif category == 'warning' %}⚠️
-                    {% else %}ℹ️{% endif %}
-                </span>
-                <span class="alert-message">{{ message }}</span>
-                <button class="alert-close" onclick="this.parentElement.remove()">×</button>
-            </div>
-            {% endfor %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            <span class="alert-icon">
+                {% if category == 'success' %}✅
+                {% elif category == 'danger' %}❌
+                {% elif category == 'warning' %}⚠️
+                {% else %}ℹ️{% endif %}
+            </span>
+            <span class="alert-message">{{ message }}</span>
+            <button class="alert-close" onclick="this.parentElement.remove()">×</button>
         </div>
-        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
     <!-- Contenido Principal -->
@@ -143,4 +151,5 @@
     {% block extra_js %}{% endblock %}
     {% block scripts %}{% endblock %}
 </body>
+
 </html>

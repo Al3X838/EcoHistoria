@@ -129,6 +129,8 @@ def profile():
                          total_canjes=total_canjes)
 
 
+
+
 @main_bp.route('/rankings')
 @login_required
 def rankings():

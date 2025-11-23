@@ -3,49 +3,86 @@
 {% block title %}{{ _('Iniciar Sesión') }} - UCA Verde{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card">
-        <div class="auth-header">
-            <div class="auth-logo">🌱</div>
-            <h1>UCA Puntos Verdes</h1>
-            <p>{{ _('Iniciar Sesión') }}</p>
-        </div>
+<div class="auth-wrapper">
+    <div class="auth-background">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
 
-        <form method="POST" class="auth-form">
-            {{ form.hidden_tag() }}
-            
-            <div class="form-group">
-                <label for="username">{{ _('Usuario') }}</label>
-                {{ form.username(class="form-control", placeholder=_('Ingresa tu usuario')) }}
-                {% if form.username.errors %}
-                    <span class="form-error">{{ form.username.errors[0] }}</span>
-                {% endif %}
-            </div>
-
-            <div class="form-group">
-                <label for="password">{{ _('Contraseña') }}</label>
-                {{ form.password(class="form-control", placeholder=_('Ingresa tu contraseña')) }}
-                {% if form.password.errors %}
-                    <span class="form-error">{{ form.password.errors[0] }}</span>
-                {% endif %}
-                <div class="text-right mt-2">
-                    <a href="{{ url_for('auth.reset_request') }}" class="btn-link">{{ _('¿Olvidaste tu contraseña?') }}</a>
+    <div class="auth-container">
+        <div class="auth-card glass-effect">
+            <div class="auth-header">
+                <div class="auth-logo-wrapper">
+                    <div class="auth-logo">🌱</div>
                 </div>
+                <h1>{{ _('Bienvenido') }}</h1>
+                <p class="auth-subtitle">{{ _('Ingresa a tu cuenta para continuar') }}</p>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">
-                {{ _('Iniciar Sesión') }}
-            </button>
-        </form>
+            <form method="POST" class="auth-form">
+                {{ form.hidden_tag() }}
 
-        <div class="auth-footer">
-            <p>{{ _('¿No tienes cuenta?') }} <a href="{{ url_for('auth.register') }}">{{ _('Regístrate aquí') }}</a></p>
-        </div>
+                <div class="form-group">
+                    <label for="username">{{ _('Usuario') }}</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        {{ form.username(class="form-control", placeholder=_('Tu nombre de usuario')) }}
+                    </div>
+                    {% if form.username.errors %}
+                    <span class="form-error">{{ form.username.errors[0] }}</span>
+                    {% endif %}
+                </div>
 
-        <div class="auth-demo">
-            <p class="demo-title">🧪 {{ _('Usuarios de prueba:') }}</p>
-            <p><strong>{{ _('Admin:') }}</strong> admin / admin123</p>
-            <p><strong>{{ _('Estudiante:') }}</strong> estudiante1 / test123</p>
+                <div class="form-group">
+                    <label for="password">{{ _('Contraseña') }}</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        {{ form.password(class="form-control", placeholder=_('Tu contraseña')) }}
+                    </div>
+                    {% if form.password.errors %}
+                    <span class="form-error">{{ form.password.errors[0] }}</span>
+                    {% endif %}
+                    <div class="text-right mt-2">
+                        <a href="{{ url_for('auth.reset_request') }}" class="forgot-link">{{ _('¿Olvidaste tu
+                            contraseña?') }}</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    {{ _('Iniciar Sesión') }}
+                    <span class="btn-icon">➜</span>
+                </button>
+            </form>
+
+
+
+
+
+            <div class="auth-footer-styled">
+                <p>{{ _('¿Aún no tienes cuenta?') }}</p>
+                <a href="{{ url_for('auth.register') }}" class="register-btn">
+                    {{ _('Crear Cuenta Nueva') }}
+                </a>
+            </div>
+
+            <script>
+                function fillCredentials(username, password) {
+                    const userInput = document.querySelector('input[name="username"]');
+                    const passInput = document.querySelector('input[name="password"]');
+
+                    userInput.value = username;
+                    passInput.value = password;
+
+                    // Visual feedback
+                    userInput.parentElement.classList.add('filled');
+                    passInput.parentElement.classList.add('filled');
+                    setTimeout(() => {
+                        userInput.parentElement.classList.remove('filled');
+                        passInput.parentElement.classList.remove('filled');
+                    }, 500);
+                }
+            </script>
         </div>
     </div>
 </div>

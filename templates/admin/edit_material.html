@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Material - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">✏️</span> Editar Material: {{ material.nombre }}
+        </h1>
+        <a href="{{ url_for('admin.materiales') }}" class="btn btn-secondary">← Volver</a>
+    </div>
+
+    <div class="card">
+        <form method="POST" class="form-grid">
+            <div class="form-group">
+                <label for="nombre">Nombre del Material</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" value="{{ material.nombre }}"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <select id="categoria" name="categoria" class="form-control" required>
+                    <option value="Plástico" {% if material.categoria=='Plástico' %}selected{% endif %}>Plástico
+                    </option>
+                    <option value="Papel" {% if material.categoria=='Papel' %}selected{% endif %}>Papel</option>
+                    <option value="Metal" {% if material.categoria=='Metal' %}selected{% endif %}>Metal</option>
+                    <option value="Vidrio" {% if material.categoria=='Vidrio' %}selected{% endif %}>Vidrio</option>
+                    <option value="Orgánico" {% if material.categoria=='Orgánico' %}selected{% endif %}>Orgánico
+                    </option>
+                    <option value="Electrónico" {% if material.categoria=='Electrónico' %}selected{% endif %}>
+                        Electrónico</option>
+                    <option value="Otro" {% if material.categoria=='Otro' %}selected{% endif %}>Otro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="puntos">Puntos por Unidad</label>
+                <input type="number" id="puntos" name="puntos" class="form-control" min="1"
+                    value="{{ material.puntos_valor }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="unidad">Unidad de Medida</label>
+                <select id="unidad" name="unidad" class="form-control" required>
+                    <option value="unidad" {% if material.unidad_medida=='unidad' %}selected{% endif %}>Unidad</option>
+                    <option value="kg" {% if material.unidad_medida=='kg' %}selected{% endif %}>Kilogramo (kg)</option>
+                    <option value="hoja" {% if material.unidad_medida=='hoja' %}selected{% endif %}>Hoja</option>
+                    <option value="botella" {% if material.unidad_medida=='botella' %}selected{% endif %}>Botella
+                    </option>
+                    <option value="lata" {% if material.unidad_medida=='lata' %}selected{% endif %}>Lata</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="co2">CO₂ Evitado (kg)</label>
+                <input type="number" id="co2" name="co2" class="form-control" step="0.01" min="0"
+                    value="{{ material.impacto_co2 }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="agua">Agua Ahorrada (L)</label>
+                <input type="number" id="agua" name="agua" class="form-control" step="0.1" min="0"
+                    value="{{ material.impacto_agua }}" required>
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    💾 Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

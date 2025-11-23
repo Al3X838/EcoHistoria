@@ -3,106 +3,97 @@
 {% block title %}Mi Perfil - UCA Verde{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="page-header">
-        <h1 class="page-title">
-            <span class="icon">👤</span> Mi Perfil
-        </h1>
+<div class="profile-container">
+    <!-- User Info Card -->
+    <div class="profile-header-card">
+        <div class="profile-avatar-section">
+            <div class="profile-avatar">{{ current_user.nombre_completo[0] }}</div>
+            <div class="profile-level-badge">{{ current_user.nivel }}</div>
+        </div>
+        <div class="profile-info-section">
+            <h1 class="profile-name">{{ current_user.nombre_completo }}</h1>
+            <p class="profile-username">@{{ current_user.username }}</p>
+            <div class="profile-meta">
+                <span class="profile-meta-item">📧 {{ current_user.email }}</span>
+                <span class="profile-meta-item">🏛️ {{ current_user.facultad }}</span>
+                <span class="profile-meta-item">🎓 {{ current_user.carrera }}</span>
+            </div>
+        </div>
+        <div class="profile-stats-section">
+            <div class="profile-stat">
+                <div class="profile-stat-value">{{ current_user.puntos_totales }}</div>
+                <div class="profile-stat-label">Puntos</div>
+            </div>
+            <div class="profile-stat">
+                <div class="profile-stat-value">{{ current_user.racha_actual }}</div>
+                <div class="profile-stat-label">Racha</div>
+            </div>
+            <div class="profile-stat">
+                <div class="profile-stat-value">{{ total_reciclajes }}</div>
+                <div class="profile-stat-label">Reciclajes</div>
+            </div>
+        </div>
     </div>
 
-    <div class="profile-grid">
-        <!-- Información del Usuario -->
-        <div class="card profile-info-card">
-            <div class="profile-avatar">
-                <div class="avatar-large">{{ current_user.nombre_completo[0] }}</div>
-            </div>
-            <h2 class="profile-name">{{ current_user.nombre_completo }}</h2>
-            <p class="profile-username">@{{ current_user.username }}</p>
-            
-            <div class="profile-details">
-                <div class="detail-item">
-                    <span class="detail-icon">📧</span>
-                    <span class="detail-text">{{ current_user.email }}</span>
+    <!-- Main Content Grid -->
+    <div class="profile-content-grid">
+        <!-- Environmental Impact -->
+        <div class="profile-card impact-card">
+            <h2 class="profile-card-title">
+                <span class="card-icon">🌍</span>
+                Tu Impacto Ambiental
+            </h2>
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-icon">💨</div>
+                    <div class="impact-data">
+                        <div class="impact-value">{{ impacto.co2_evitado }} kg</div>
+                        <div class="impact-label">CO₂ Evitado</div>
+                        <div class="impact-equiv">≈ {{ (impacto.co2_evitado / 0.404)|round(1) }} km en auto</div>
+                    </div>
                 </div>
-                <div class="detail-item">
-                    <span class="detail-icon">🏛️</span>
-                    <span class="detail-text">{{ current_user.facultad }}</span>
+                <div class="impact-stat">
+                    <div class="impact-icon">💧</div>
+                    <div class="impact-data">
+                        <div class="impact-value">{{ impacto.agua_ahorrada }} L</div>
+                        <div class="impact-label">Agua Ahorrada</div>
+                        <div class="impact-equiv">≈ {{ (impacto.agua_ahorrada / 8)|round(0)|int }} duchas</div>
+                    </div>
                 </div>
-                <div class="detail-item">
-                    <span class="detail-icon">🎓</span>
-                    <span class="detail-text">{{ current_user.carrera }}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-icon">📅</span>
-                    <span class="detail-text">Miembro desde {{ current_user.fecha_registro.strftime('%d/%m/%Y') }}</span>
-                </div>
-            </div>
-
-            <div class="profile-stats-mini">
-                <div class="stat-mini">
-                    <div class="stat-value">{{ current_user.puntos_totales }}</div>
-                    <div class="stat-label">Puntos</div>
-                </div>
-                <div class="stat-mini">
-                    <div class="stat-value">{{ current_user.racha_actual }}</div>
-                    <div class="stat-label">Racha</div>
-                </div>
-                <div class="stat-mini">
-                    <div class="stat-value">{{ total_reciclajes }}</div>
-                    <div class="stat-label">Reciclajes</div>
-                </div>
-            </div>
-
-            <div class="profile-level">
-                <span class="level-badge-large">{{ current_user.nivel }}</span>
-            </div>
-        </div>
-
-        <!-- Impacto Ambiental -->
-        <div class="card impact-card">
-            <h3 class="card-title">🌍 Tu Impacto Ambiental Total</h3>
-            <div class="impact-grid">
-                <div class="impact-item-large">
-                    <div class="impact-icon-large">💨</div>
-                    <div class="impact-value-large">{{ impacto.co2_evitado }} kg</div>
-                    <div class="impact-label-large">CO₂ Evitado</div>
-                    <p class="impact-desc">Equivalente a {{ (impacto.co2_evitado / 0.404)|round(1) }} km en auto</p>
-                </div>
-                <div class="impact-item-large">
-                    <div class="impact-icon-large">💧</div>
-                    <div class="impact-value-large">{{ impacto.agua_ahorrada }} L</div>
-                    <div class="impact-label-large">Agua Ahorrada</div>
-                    <p class="impact-desc">Equivalente a {{ (impacto.agua_ahorrada / 8)|round(0)|int }} duchas</p>
-                </div>
-                <div class="impact-item-large">
-                    <div class="impact-icon-large">🌳</div>
-                    <div class="impact-value-large">{{ impacto.arboles_salvados }}</div>
-                    <div class="impact-label-large">Árboles Salvados</div>
-                    <p class="impact-desc">Absorción de CO₂ anual equivalente</p>
+                <div class="impact-stat">
+                    <div class="impact-icon">🌳</div>
+                    <div class="impact-data">
+                        <div class="impact-value">{{ impacto.arboles_salvados }}</div>
+                        <div class="impact-label">Árboles Salvados</div>
+                        <div class="impact-equiv">Absorción anual de CO₂</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Estadísticas de Actividad -->
-        <div class="card activity-stats-card">
-            <h3 class="card-title">📊 Estadísticas de Actividad</h3>
-            <div class="activity-stats-list">
-                <div class="activity-stat-item">
+        <!-- Activity Stats -->
+        <div class="profile-card activity-card">
+            <h2 class="profile-card-title">
+                <span class="card-icon">📊</span>
+                Estadísticas
+            </h2>
+            <div class="activity-list">
+                <div class="activity-item">
                     <span class="activity-icon">♻️</span>
                     <span class="activity-name">Reciclajes</span>
                     <span class="activity-value">{{ total_reciclajes }}</span>
                 </div>
-                <div class="activity-stat-item">
+                <div class="activity-item">
                     <span class="activity-icon">📚</span>
                     <span class="activity-name">Quizzes</span>
                     <span class="activity-value">{{ total_quizzes }}</span>
                 </div>
-                <div class="activity-stat-item">
+                <div class="activity-item">
                     <span class="activity-icon">🎁</span>
                     <span class="activity-name">Canjes</span>
                     <span class="activity-value">{{ total_canjes }}</span>
                 </div>
-                <div class="activity-stat-item">
+                <div class="activity-item">
                     <span class="activity-icon">🔥</span>
                     <span class="activity-name">Racha Actual</span>
                     <span class="activity-value">{{ current_user.racha_actual }} días</span>
@@ -110,67 +101,61 @@
             </div>
         </div>
 
-        <!-- Logros -->
-        <div class="card achievements-card">
-            <h3 class="card-title">🏆 Mis Logros ({{ logros_obtenidos|length }}/{{ todos_logros|length }})</h3>
-            <div class="achievements-grid-new">
+        <!-- Achievements -->
+        <div class="profile-card achievements-card">
+            <h2 class="profile-card-title">
+                <span class="card-icon">🏆</span>
+                Mis Logros <span class="achievement-count">({{ logros_obtenidos|length }}/{{ todos_logros|length
+                    }})</span>
+            </h2>
+            <div class="achievements-grid">
                 {% for logro in todos_logros %}
-                    {% set unlocked = logro.id in logros_obtenidos %}
-                    <a href="{{ url_for('main.logro_detalle', logro_id=logro.id) if unlocked else '#' }}" 
-                       class="achievement-badge {{ 'unlocked' if unlocked else 'locked' }}"
-                       title="{{ logro.descripcion if unlocked else 'Logro bloqueado' }}">
-                        
-                        <div class="achievement-badge-icon">
-                            {{ logro.icono if unlocked else '🔒' }}
-                        </div>
-                        <div class="achievement-badge-info">
-                            <h4 class="achievement-badge-name">{{ logro.nombre }}</h4>
-                            {% if unlocked %}
-                                <span class="achievement-badge-status">Desbloqueado</span>
-                            {% else %}
-                                <span class="achievement-badge-status">Bloqueado</span>
-                            {% endif %}
-                        </div>
-                    </a>
+                {% set unlocked = logro.id in logros_obtenidos %}
+                <a href="{{ url_for('main.logro_detalle', logro_id=logro.id) if unlocked else '#' }}"
+                    class="achievement-item {{ 'unlocked' if unlocked else 'locked' }}"
+                    title="{{ logro.descripcion if unlocked else 'Logro bloqueado' }}">
+                    <div class="achievement-icon">{{ logro.icono if unlocked else '🔒' }}</div>
+                    <div class="achievement-name">{{ logro.nombre }}</div>
+                </a>
                 {% endfor %}
             </div>
         </div>
 
-        <!-- Historial de Transacciones -->
-        <div class="card transactions-card">
-            <h3 class="card-title">📜 Historial Completo de Transacciones</h3>
+        <!-- Recent Transactions -->
+        <div class="profile-card transactions-card">
+            <h2 class="profile-card-title">
+                <span class="card-icon">📜</span>
+                Transacciones Recientes
+            </h2>
             {% if transacciones %}
-                <div class="transactions-list">
-                    {% for trans in transacciones[:20] %}
-                    <div class="transaction-item">
-                        <div class="transaction-icon {{ trans.tipo }}">
-                            {% if trans.tipo == 'reciclaje' %}♻️
-                            {% elif trans.tipo == 'quiz' %}📚
-                            {% elif trans.tipo == 'evento' %}🎉
-                            {% elif trans.tipo == 'canje' %}🎁
-                            {% elif trans.tipo == 'casino' %}🎰
-                            {% endif %}
-                        </div>
-                        <div class="transaction-content">
-                            <p class="transaction-desc">{{ trans.descripcion }}</p>
-                            <p class="transaction-date">{{ trans.fecha.strftime('%d/%m/%Y %H:%M') }}</p>
-                        </div>
-                        <div class="transaction-points {{ 'positive' if trans.puntos > 0 else 'negative' }}">
-                            {{ '+' if trans.puntos > 0 else '' }}{{ trans.puntos }} pts
-                        </div>
+            <div class="transactions-list">
+                {% for trans in transacciones[:10] %}
+                <div class="transaction-item">
+                    <div class="transaction-icon {{ trans.tipo }}">
+                        {% if trans.tipo == 'reciclaje' %}♻️
+                        {% elif trans.tipo == 'quiz' %}📚
+                        {% elif trans.tipo == 'evento' %}🎉
+                        {% elif trans.tipo == 'canje' %}🎁
+                        {% elif trans.tipo == 'casino' %}🎰
+                        {% endif %}
                     </div>
-                    {% endfor %}
+                    <div class="transaction-info">
+                        <div class="transaction-desc">{{ trans.descripcion }}</div>
+                        <div class="transaction-date">{{ trans.fecha.strftime('%d/%m/%Y %H:%M') }}</div>
+                    </div>
+                    <div class="transaction-points {{ 'positive' if trans.puntos > 0 else 'negative' }}">
+                        {{ '+' if trans.puntos > 0 else '' }}{{ trans.puntos }}
+                    </div>
                 </div>
-                {% if transacciones|length > 20 %}
-                    <p class="text-center" style="margin-top: 1rem; color: #6b7280;">
-                        Mostrando las últimas 20 transacciones de {{ transacciones|length }} totales
-                    </p>
-                {% endif %}
+                {% endfor %}
+            </div>
+            {% if transacciones|length > 10 %}
+            <p class="transactions-note">Mostrando las últimas 10 de {{ transacciones|length }} transacciones</p>
+            {% endif %}
             {% else %}
-                <p class="empty-state">No tienes transacciones registradas aún.</p>
+            <p class="empty-state">No tienes transacciones registradas aún.</p>
             {% endif %}
         </div>
     </div>
 </div>
-
 {% endblock %}

@@ -140,3 +140,24 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Menú de Usuario
+function toggleUserMenu(event) {
+    event.stopPropagation();
+    const menu = document.getElementById('userDropdown');
+    const button = event.currentTarget;
+    
+    menu.classList.toggle('show');
+    button.classList.toggle('active');
+}
+
+// Cerrar menú al hacer click fuera
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('userDropdown');
+    const button = document.querySelector('.user-button');
+    
+    if (menu && menu.classList.contains('show') && !menu.contains(event.target) && !button.contains(event.target)) {
+        menu.classList.remove('show');
+        button.classList.remove('active');
+    }
+});

@@ -109,6 +109,18 @@
                                 class="btn btn-sm btn-secondary">
                                 {% if material.activo %}Desactivar{% else %}Activar{% endif %}
                             </a>
+
+                            {% if material.id in materiales_usados %}
+                            <button class="btn btn-sm btn-secondary" disabled
+                                title="No se puede editar: ya existen entregas">
+                                ✏️ Editar
+                            </button>
+                            {% else %}
+                            <a href="{{ url_for('admin.editar_material', material_id=material.id) }}"
+                                class="btn btn-sm btn-primary">
+                                ✏️ Editar
+                            </a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
