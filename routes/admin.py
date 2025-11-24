@@ -5,7 +5,8 @@ from models import db, Material, Reward, User, Transaction
 from utils import estadisticas_globales
 from forms import AjustarPuntosForm # Asegúrate de importar el nuevo form
 from models import User, Transaction # Asegúrate de importar User y Transaction
-
+# routes/admin.py
+from models import db, Material, Reward, User, Transaction, UserReward  # <--- Agregamos UserReward
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 def admin_required(f):
@@ -357,3 +358,49 @@ def toggle_usuario(user_id):
     flash(f'La cuenta de {user.username} ha sido {estado}.', 'success')
     
     return redirect(url_for('admin.ver_usuario', user_id=user.id))
+
+# ==================== GESTIÓN DE CUPONES (RF022) ====================
+
+@admin_bp.route('/cupones', methods=['GET'])
+@login_required
+@admin_required
+def cupones():
+    """
+    RF022: Listado y validación de cupones de canje.
+    Permite buscar por código o nombre de usuario.
+    """
+    search_query = request.args.get('q', '').strip()
+    
+    # Query base optimizada con Joins
+    query = UserReward.query.join(User).join(Reward).order_by(UserReward.fecha_canje.desc())
+    
+    if search_query:
+        # Búsqueda flexible: Código, Usuario o Nombre
+        query = query.filter(
+            (UserReward.codigo.ilike(f'%{search_query}%')) | 
+            (User.username.ilike(f'%{search_query}%')) |
+            (User.nombre_completo.ilike(f'%{search_query}%'))
+        )
+    
+    # Limitamos a 50 para no saturar la vista si hay muchos
+    cupones = query.limit(50).all()
+    
+    return render_template('admin/coupons.html', cupones=cupones, search_query=search_query)
+
+@admin_bp.route('/cupones/validar/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def validar_cupon(id):
+    """
+    Marcar un cupón como 'entregado'
+    """
+    canje = UserReward.query.get_or_404(id)
+    
+    if canje.estado == 'entregado':
+        flash('Este cupón ya fue entregado anteriormente.', 'warning')
+    else:
+        canje.estado = 'entregado'
+        db.session.commit()
+        flash(f'Cupón {canje.codigo} validado y marcado como ENTREGADO.', 'success')
+        
+    return redirect(url_for('admin.cupones'))

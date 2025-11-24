@@ -26,9 +26,11 @@
                         {% else %}🎁
                         {% endif %}
                     </div>
+
                     <div class="reward-details">
                         <h3 class="reward-name">{{ canje.recompensa.nombre }}</h3>
                         <p class="reward-description">{{ canje.recompensa.descripcion }}</p>
+                        
                         <div class="reward-meta">
                             <span class="meta-item">
                                 <span class="meta-icon">📅</span>
@@ -39,7 +41,17 @@
                                 Costo: {{ canje.recompensa.puntos_costo }} pts
                             </span>
                         </div>
+
+                        {% if canje.codigo %}
+                        <div class="coupon-code-container" style="margin-top: 1rem; padding: 10px; background: var(--bg-card); border: 1px dashed var(--primary-color); border-radius: 8px; display: inline-block;">
+                            <small style="display: block; color: var(--text-muted); font-size: 0.8em; margin-bottom: 4px;">Tu código para canjear:</small>
+                            <span style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: 800; color: var(--primary-color); letter-spacing: 2px;">
+                                {{ canje.codigo }}
+                            </span>
+                        </div>
+                        {% endif %}
                     </div>
+
                     <div class="reward-status">
                         <span class="status-badge status-{{ canje.estado }}">
                             {% if canje.estado == 'pendiente' %}
@@ -68,7 +80,7 @@
         <h3>📍 Cómo recoger tus recompensas</h3>
         <ul>
             <li>Dirígete al Punto Verde UCA (Edificio de Administración, Planta Baja)</li>
-            <li>Presenta tu carnet universitario</li>
+            <li>Presenta tu carnet universitario y el <strong>código del cupón</strong>.</li>
             <li>Horario de atención: Lunes a Viernes, 8:00 AM - 4:00 PM</li>
             <li>Las recompensas están disponibles 48 horas después del canje</li>
         </ul>

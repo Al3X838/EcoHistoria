@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Administración de Cupones{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="page-header" style="margin-bottom: 2rem;">
+        <h1>🎫 Validación de Cupones</h1>
+        <p class="text-muted">Busca el código presentado por el estudiante para entregar la recompensa.</p>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem; padding: 1.5rem;">
+        <form action="{{ url_for('admin.cupones') }}" method="GET" style="display: flex; gap: 10px;">
+            <input type="text" name="q" placeholder="Escribe el código (Ej: UCA-A1B2) o usuario..." value="{{ search_query }}" 
+                   style="flex-grow: 1; padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-main);">
+            <button type="submit" class="btn btn-primary">🔍 Buscar</button>
+            {% if search_query %}
+                <a href="{{ url_for('admin.cupones') }}" class="btn btn-secondary">Limpiar</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="card table-responsive">
+        <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--primary-color);">
+                    <th style="padding: 10px; text-align: left;">CÓDIGO</th>
+                    <th style="padding: 10px; text-align: left;">Estudiante</th>
+                    <th style="padding: 10px; text-align: left;">Recompensa</th>
+                    <th style="padding: 10px; text-align: left;">Fecha</th>
+                    <th style="padding: 10px; text-align: center;">Estado</th>
+                    <th style="padding: 10px; text-align: right;">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for canje in cupones %}
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px;">
+                        <span style="font-family: monospace; font-size: 1.2em; color: var(--primary-color); font-weight: bold;">
+                            {{ canje.codigo or 'SIN-CODIGO' }}
+                        </span>
+                    </td>
+                    <td style="padding: 10px;">
+                        <strong>{{ canje.usuario.nombre_completo }}</strong><br>
+                        <small style="color: var(--text-muted);">{{ canje.usuario.facultad }}</small>
+                    </td>
+                    <td style="padding: 10px;">
+                        {{ canje.recompensa.nombre }}
+                    </td>
+                    <td style="padding: 10px;">
+                        {{ canje.fecha_canje.strftime('%d/%m %H:%M') }}
+                    </td>
+                    <td style="padding: 10px; text-align: center;">
+                        {% if canje.estado == 'entregado' %}
+                            <span style="background: rgba(40, 167, 69, 0.2); color: #28a745; padding: 4px 8px; border-radius: 4px;">Entregado</span>
+                        {% else %}
+                            <span style="background: rgba(255, 193, 7, 0.2); color: #ffc107; padding: 4px 8px; border-radius: 4px;">Pendiente</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 10px; text-align: right;">
+                        {% if canje.estado == 'pendiente' %}
+                            <form action="{{ url_for('admin.validar_cupon', id=canje.id) }}" method="POST">
+                                <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('¿Confirmas la entrega física del premio?');">
+                                    ✅ Entregar
+                                </button>
+                            </form>
+                        {% else %}
+                            <button disabled class="btn btn-secondary btn-sm" style="opacity: 0.5;">Archivado</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                        {% if search_query %}
+                            No se encontraron cupones para "{{ search_query }}"
+                        {% else %}
+                            No hay canjes recientes.
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

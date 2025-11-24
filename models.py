@@ -188,7 +188,7 @@ class UserReward(db.Model):
     reward_id = db.Column(db.Integer, db.ForeignKey('rewards.id'), nullable=False)
     fecha_canje = db.Column(db.DateTime, default=get_current_time)
     estado = db.Column(db.String(20), default='pendiente')  # pendiente, entregado, cancelado
-    
+    codigo = db.Column(db.String(20), unique=True, nullable=True)
     def __repr__(self):
         return f'<UserReward user={self.user_id} reward={self.reward_id}>'
 

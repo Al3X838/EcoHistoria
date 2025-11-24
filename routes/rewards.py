@@ -1,8 +1,17 @@
+import string
+import random
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from models import db, Reward, UserReward, Transaction
 
 rewards_bp = Blueprint('rewards', __name__, url_prefix='/rewards')
+
+def generar_codigo_canje():
+    """Genera un código único tipo UCA-A1B2C3"""
+    chars = string.ascii_uppercase + string.digits
+    # Generamos 6 caracteres aleatorios
+    random_str = ''.join(random.choices(chars, k=6))
+    return f"UCA-{random_str}"
 
 @rewards_bp.route('/')
 @login_required
@@ -17,13 +26,14 @@ def index():
     
     recompensas = query.all()
     
+    # Obtener categorías únicas para el filtro
     categorias = db.session.query(Reward.categoria).distinct().all()
     categorias = [c[0] for c in categorias if c[0]]
     
     return render_template('rewards/rewards.html', 
-                         recompensas=recompensas, 
-                         categorias=categorias,
-                         categoria_actual=categoria)
+                          recompensas=recompensas, 
+                          categorias=categorias,
+                          categoria_actual=categoria)
 
 
 @rewards_bp.route('/canjear/<int:reward_id>', methods=['POST'])
@@ -42,13 +52,18 @@ def canjear(reward_id):
         flash('Esta recompensa no tiene stock disponible.', 'warning')
         return redirect(url_for('rewards.index'))
     
-    # Restar puntos
+    # Restar puntos (esto ya genera la transacción)
     if current_user.restar_puntos(recompensa.puntos_costo, 'canje', f'Canje: {recompensa.nombre}'):
-        # Crear registro de canje
+        
+        # === CORRECCIÓN AQUÍ: Generamos el código antes de guardar ===
+        codigo_generado = generar_codigo_canje()
+        
+        # Crear registro de canje con el código
         user_reward = UserReward(
             user_id=current_user.id,
             reward_id=recompensa.id,
-            estado='pendiente'
+            estado='pendiente',
+            codigo=codigo_generado  # <--- ASIGNAMOS EL CÓDIGO AQUÍ
         )
         
         # Reducir stock
@@ -57,7 +72,7 @@ def canjear(reward_id):
         db.session.add(user_reward)
         db.session.commit()
         
-        flash(f'¡Felicitaciones! Has canjeado: {recompensa.nombre}. Recógela en el punto verde UCA. 🎁', 'success')
+        flash(f'¡Felicitaciones! Has canjeado: {recompensa.nombre}. Tu código es {codigo_generado}. 🎁', 'success')
     else:
         flash('Error al procesar el canje.', 'danger')
     
