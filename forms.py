@@ -76,16 +76,15 @@ class ApuestaForm(FlaskForm):
     cantidad = IntegerField(_l('Cantidad de Puntos'), validators=[DataRequired(), NumberRange(min=10)])
     submit = SubmitField(_l('Apostar'))
 
-<<<<<<< HEAD
 class AjustarPuntosForm(FlaskForm):
     """Formulario para ajuste manual de puntos por Admin (RF023)"""
     puntos = IntegerField('Puntos (positivo para sumar, negativo para restar)', validators=[DataRequired()])
     justificacion = TextAreaField('Justificación del ajuste', validators=[DataRequired()])
     submit = SubmitField('Aplicar Ajuste')
-=======
+
 class ChangePasswordForm(FlaskForm):
     current_password = PasswordField(_l('Contraseña Actual'), validators=[DataRequired()])
     new_password = PasswordField(_l('Nueva Contraseña'), validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField(_l('Confirmar Nueva Contraseña'), validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField(_l('Actualizar Contraseña'))
->>>>>>> origin/Asad
+
