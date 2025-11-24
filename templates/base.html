@@ -38,14 +38,12 @@
                 <a href="{{ url_for('main.rankings') }}" class="nav-link">
                     <span>🏆</span> {{ _('Rankings') }}
                 </a>
-                <a href="{{ url_for('casino.index') }}" class="nav-link casino-link">
-                    <span>🎰</span> {{ _('Casino') }}
-                </a>
+                
             </div>
 
             <div class="nav-user">
                 <div class="controls-container">
-                    <div class="language-selector">
+                     v <div class="language-selector">
                         <a href="{{ url_for('main.set_language', lang='es') }}"
                             class="lang-link {% if get_locale() == 'es' %}active{% endif %}">ES</a>
                         <span>|</span>
@@ -137,13 +135,13 @@
                 </div>
                 <div class="footer-section">
                     <h4>{{ _('Contacto') }}</h4>
-                    <p>📧 verde@uca.edu.sv</p>
-                    <p>📞 +503 2210-6600</p>
-                    <p>📍 Universidad Centroamericana José Simeón Cañas</p>
+                    <p>📧 ecopuntosuca@gmail.com</p>
+                    <p>📞 +595 981 821 883</p>
+                    <p>📍 Universidad Católica Nuestra Señora de Asunción</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2_025 UCA Puntos Verdes. {{ _('Todos los derechos reservados.') }}</p>
+                <p>&copy; 2025 UCA Puntos Verdes. {{ _('Todos los derechos reservados a Lord Alex.') }}</p>
             </div>
         </div>
     </footer>

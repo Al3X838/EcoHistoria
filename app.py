@@ -9,7 +9,7 @@ from flask_migrate import Migrate
 from utils import inject_csrf_token, obtener_nombre_carrera
 import os
 import traceback
-
+from flask_babel import Babel, gettext
 babel = Babel()
 migrate = Migrate() 
 
