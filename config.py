@@ -32,3 +32,48 @@ class Config:
     
     # Idiomas soportados
     LANGUAGES = ['es', 'en']
+
+
+    
+    # Estructura de Facultades y Carreras UCA
+    UCA_DEPARTAMENTOS = {
+        'Ciencias y Tecnología': [
+            ('ing_informatica', 'Ingeniería Informática'),
+            ('ing_civil', 'Ingeniería Civil'),
+            ('ing_industrial', 'Ingeniería Industrial'),
+            ('ing_electronica', 'Ingeniería Electrónica'),
+            ('arq', 'Arquitectura'),
+            ('analisis', 'Análisis de Sistemas'),
+            ('diseno_ind', 'Industrial'),
+            ('diseno', 'Diseño Gráfico')
+        ],
+        'Ciencias Jurídicas y Diplomáticas': [
+            ('derecho', 'Derecho'),
+            ('notariado', 'Notariado'),
+            ('rel_inter', 'Relaciones Internacionales')
+        ],
+        'Ciencias Contables y Administrativas': [
+            ('admin', 'Administración de Empresas'),
+            ('contabilidad', 'Contabilidad'),
+            ('marketing', 'Marketing'),
+            ('comercio', 'Comercio Internacional')
+        ],
+        'Ciencias de la Salud': [
+            ('medicina', 'Medicina'),
+            ('enfermeria', 'Enfermería'),
+            ('nutricion', 'Nutrición'),
+            ('odontologia', 'Odontología')
+        ],
+        'No Estudiante': [
+            ('docentes', 'Docentes'),
+            ('personal_adm', 'Personal Administrativo')
+        ],
+        'Filosofía y Ciencias Humanas': [
+            ('psicologia', 'Psicología'),
+            ('comunicacion', 'Ciencias de la Comunicación'),
+            ('sociologia', 'Sociología'),
+            ('teologia', 'Teología'),
+            ('historia', 'Historia')
+        ]
+        
+    }

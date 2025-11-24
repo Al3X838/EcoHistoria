@@ -4,10 +4,11 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from config import Config
 from models import db, User
-from utils import inject_csrf_token
+from flask_migrate import Migrate 
+# Importamos ambas funciones de utilidad
+from utils import inject_csrf_token, obtener_nombre_carrera
 import os
 import traceback
-from flask_migrate import Migrate 
 
 babel = Babel()
 migrate = Migrate() 
@@ -29,6 +30,7 @@ def create_app(config_class=Config):
     babel.init_app(app, locale_selector=get_locale)
     db.init_app(app)
     migrate.init_app(app, db) 
+    
     # Configurar Flask-Login
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -56,12 +58,18 @@ def create_app(config_class=Config):
     app.register_blueprint(admin_bp)
     app.register_blueprint(share_bp)
     
-    # Registrar procesador de contexto
+    # Registrar procesador de contexto CSRF
     app.context_processor(inject_csrf_token)
     
+    # === CORRECCIÓN AQUÍ ===
+    # Unificamos todas las utilidades en una sola función decorada
     @app.context_processor
-    def inject_get_locale():
-        return dict(get_locale=get_locale)
+    def inject_utilities():
+        return dict(
+            get_locale=get_locale,
+            obtener_nombre_carrera=obtener_nombre_carrera 
+        )
+    # =======================
 
     # Crear tablas si no existen
     with app.app_context():
@@ -79,8 +87,7 @@ def create_app(config_class=Config):
         db.session.rollback()
         return render_template('errors/500.html'), 500
     
-    return app
-
+    return app  
 
 if __name__ == '__main__':
     app = create_app()

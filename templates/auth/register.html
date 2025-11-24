@@ -43,7 +43,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="facultad">Facultad *</label>
-                    {{ form.facultad(class="form-control") }}
+                    {{ form.facultad(class="form-control", id="facultad_select") }}
                     {% if form.facultad.errors %}
                         <span class="form-error">{{ form.facultad.errors[0] }}</span>
                     {% endif %}
@@ -51,7 +51,7 @@
 
                 <div class="form-group">
                     <label for="carrera">Carrera *</label>
-                    {{ form.carrera(class="form-control", placeholder="Ej: Ingeniería de Sistemas") }}
+                    {{ form.carrera(class="form-control", id="carrera_select") }}
                     {% if form.carrera.errors %}
                         <span class="form-error">{{ form.carrera.errors[0] }}</span>
                     {% endif %}
@@ -68,10 +68,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="password2">Confirmar Contraseña *</label>
-                    {{ form.password2(class="form-control", placeholder="Repetir contraseña") }}
-                    {% if form.password2.errors %}
-                        <span class="form-error">{{ form.password2.errors[0] }}</span>
+                    <label for="confirm_password">Confirmar Contraseña *</label>
+                    {{ form.confirm_password(class="form-control", placeholder="Repetir contraseña") }}
+                    {% if form.confirm_password.errors %}
+                        <span class="form-error">{{ form.confirm_password.errors[0] }}</span>
                     {% endif %}
                 </div>
             </div>
@@ -86,4 +86,38 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const facultadSelect = document.getElementById('facultad_select');
+        const carreraSelect = document.getElementById('carrera_select');
+
+        const datosUCA = JSON.parse('{{ config.UCA_DEPARTAMENTOS | tojson | safe }}');
+        const valorPreseleccionado = carreraSelect.value;
+        function actualizarCarreras() {
+            const facultadSeleccionada = facultadSelect.value;
+            carreraSelect.innerHTML = '<option value="">Seleccionar Carrera</option>';
+            if (facultadSeleccionada && datosUCA[facultadSeleccionada]) {
+                const carreras = datosUCA[facultadSeleccionada];
+                carreras.forEach(function(carrera) {
+                    const option = document.createElement('option');
+                    option.value = carrera[0];
+                    option.text = carrera[1];
+                    carreraSelect.add(option);
+                });
+            }
+            if (valorPreseleccionado) {
+                for (let i = 0; i < carreraSelect.options.length; i++) {
+                    if (carreraSelect.options[i].value === valorPreseleccionado) {
+                        carreraSelect.value = valorPreseleccionado;
+                        break;
+                    }
+                }
+            }
+        }
+
+        facultadSelect.addEventListener('change', actualizarCarreras);
+        actualizarCarreras();
+    });
+</script>
 {% endblock %}

@@ -22,6 +22,7 @@ class User(UserMixin, db.Model):
     facultad = db.Column(db.String(100))
     carrera = db.Column(db.String(100))
     puntos_totales = db.Column(db.Integer, default=0)
+    puntos_historicos = db.Column(db.Integer, default=0)
     nivel = db.Column(db.String(50), default='Semilla Verde')
     racha_actual = db.Column(db.Integer, default=0)
     ultima_actividad = db.Column(db.DateTime, default=get_current_time)
@@ -99,7 +100,8 @@ class User(UserMixin, db.Model):
         self.puntos_totales += cantidad
         self.actualizar_nivel()
         self.actualizar_racha()
-        
+        if cantidad > 0:
+            self.puntos_historicos += cantidad
         transaccion = Transaction(
             user_id=self.id,
             tipo=tipo,

@@ -88,7 +88,7 @@
                             {% if user.id == current_user.id %}<span class="badge-you">Tú</span>{% endif %}
                         </h4>
                         <p class="ranking-details">
-                            {{ user.carrera }} • {{ user.facultad }}
+                            {{ obtener_nombre_carrera(user.carrera) }} • {{ user.facultad }}
                         </p>
                         <div class="ranking-level">
                             <span class="level-badge">{{ user.nivel }}</span>
@@ -167,7 +167,7 @@
                         <div class="avatar-circle career">🎓</div>
                     </div>
                     <div class="ranking-info">
-                        <h4 class="ranking-name">{{ carrera.carrera }}</h4>
+                        <h4 class="ranking-name">{{ obtener_nombre_carrera(carrera.carrera) }}</h4>
                         <p class="ranking-details">
                             {{ carrera.facultad }} • {{ carrera.estudiantes }} estudiantes
                         </p>

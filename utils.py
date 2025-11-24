@@ -48,7 +48,7 @@ def calcular_impacto_ambiental(user_id):
 def obtener_ranking_estudiantes(limite=10):
     """Obtiene el ranking de estudiantes por puntos"""
     return User.query.filter_by(is_admin=False)\
-        .order_by(User.puntos_totales.desc())\
+        .order_by(User.puntos_historicos.desc())\
         .limit(limite)\
         .all()
 
@@ -57,11 +57,11 @@ def obtener_ranking_facultades():
     """Obtiene el ranking de facultades por puntos totales"""
     resultado = db.session.query(
         User.facultad,
-        func.sum(User.puntos_totales).label('puntos_totales'),
+        func.sum(User.puntos_totales).label('puntos_historicos'),
         func.count(User.id).label('total_estudiantes')
     ).filter(User.is_admin == False)\
      .group_by(User.facultad)\
-     .order_by(func.sum(User.puntos_totales).desc())\
+     .order_by(func.sum(User.puntos_historicos).desc())\
      .all()
     
     return [{'facultad': r[0], 'puntos': r[1], 'estudiantes': r[2]} for r in resultado]
@@ -72,11 +72,11 @@ def obtener_ranking_carreras():
     resultado = db.session.query(
         User.carrera,
         User.facultad,
-        func.sum(User.puntos_totales).label('puntos_totales'),
+        func.sum(User.puntos_totales).label('puntos_historicos'),
         func.count(User.id).label('total_estudiantes')
     ).filter(User.is_admin == False)\
      .group_by(User.carrera, User.facultad)\
-     .order_by(func.sum(User.puntos_totales).desc())\
+     .order_by(func.sum(User.puntos_historicos).desc())\
      .limit(20)\
      .all()
     
@@ -86,7 +86,7 @@ def obtener_ranking_carreras():
 def estadisticas_globales():
     """Obtiene estadísticas globales del sistema"""
     total_usuarios = User.query.filter_by(is_admin=False).count()
-    total_puntos = db.session.query(func.sum(User.puntos_totales)).scalar() or 0
+    total_puntos = db.session.query(func.sum(User.puntos_historicos)).scalar() or 0
     total_transacciones = Transaction.query.count()
     
     # Calcular impacto total
@@ -363,3 +363,19 @@ def actualizar_progreso_mision(user, tipo_accion, cantidad=1):
     
     db.session.commit()
     return misiones_completadas
+
+
+
+from config import Config
+def obtener_nombre_carrera(codigo_carrera):
+    """
+    Traduce el código de carrera (ej: 'ing_inf') a su nombre real 
+    (ej: 'Ingeniería Informática') buscando en Config.
+    """
+    if not codigo_carrera:
+        return "Sin Carrera"
+    for facultad, carreras in Config.UCA_DEPARTAMENTOS.items():
+        for cod, nombre in carreras:
+            if cod == codigo_carrera:
+                return nombre
+    return codigo_carrera.replace('_', ' ').title()

@@ -6,3 +6,5 @@ login_page.html
 profile_page.html
 cookies.txt
 .pytest_cache/
+.venv/
+.env

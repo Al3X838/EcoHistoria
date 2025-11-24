@@ -3,31 +3,35 @@ from wtforms import StringField, PasswordField, SubmitField, SelectField, Intege
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, NumberRange, Length
 from models import User
 from flask_babel import lazy_gettext as _l
+from config import Config
 
 class RegistroForm(FlaskForm):
     """Formulario de Registro"""
     username = StringField(_l('Usuario'), validators=[DataRequired()])
     email = StringField(_l('Email'), validators=[DataRequired(), Email()])
     nombre_completo = StringField(_l('Nombre Completo'), validators=[DataRequired()])
-    facultad = SelectField(_l('Facultad'), choices=[
-        ('', _l('Seleccionar Facultad')),
-        ('Ingeniería', _l('Ingeniería')),
-        ('Ciencias Empresariales', _l('Ciencias Empresariales')),
-        ('Ciencias Sociales', _l('Ciencias Sociales')),
-        ('Arquitectura', _l('Arquitectura')),
-        ('Derecho', _l('Derecho')),
-        ('Medicina', _l('Medicina')),
-    ], validators=[DataRequired()])
-    carrera = StringField(_l('Carrera'), validators=[DataRequired()])
-    password = PasswordField(_l('Contraseña'), validators=[DataRequired()])
-    password2 = PasswordField(_l('Confirmar Contraseña'), validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField(_l('Registrarse'))
     
+    # === LÓGICA DE FACULTADES ===
+    opciones_facultad = [('', _l('Seleccionar Facultad'))] + [(k, k) for k in Config.UCA_DEPARTAMENTOS.keys()]
+    facultad = SelectField(_l('Facultad'), 
+                         choices=opciones_facultad, 
+                         validators=[DataRequired()])
+    # === LÓGICA DE CARRERAS ===
+    todas_carreras = [('', _l('Seleccionar Carrera'))]
+    for lista_carreras in Config.UCA_DEPARTAMENTOS.values():
+        todas_carreras.extend(lista_carreras)
+    carrera = SelectField(_l('Carrera'), 
+                        choices=todas_carreras, 
+                        validators=[DataRequired()])
+    password = PasswordField(_l('Contraseña'), validators=[DataRequired()])
+    # Nota: Cambié 'password2' a 'confirm_password' para coincidir con el HTML anterior
+    confirm_password = PasswordField(_l('Confirmar Contraseña'), 
+                                   validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField(_l('Registrarse'))
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError(_l('El nombre de usuario ya está en uso.'))
-    
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
