@@ -27,15 +27,12 @@ class Config:
         'Eco Maestro': 1501
     }
     
-    # Configuración de paginación
+ 
     ITEMS_PER_PAGE = 25
-    
-    # Idiomas soportados
     LANGUAGES = ['es', 'en']
 
 
     
-    # Estructura de Facultades y Carreras UCA
     UCA_DEPARTAMENTOS = {
         'Ciencias y Tecnología': [
             ('ing_informatica', 'Ingeniería Informática'),

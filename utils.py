@@ -1,16 +1,18 @@
 import random
 import json
 from datetime import datetime, timedelta, date
-from models import User, Transaction, Mision, UserMision, db
+from models import User, Transaction, Mision, UserMision, db, Material
 from sqlalchemy import func, and_
 from flask_wtf.csrf import generate_csrf
+from config import Config
 
 def inject_csrf_token():
+    """Inyecta el token CSRF para usar en formularios Jinja2"""
     return dict(csrf_token=generate_csrf)
 
 def calcular_impacto_ambiental(user_id):
     """Calcula el impacto ambiental total de un usuario"""
-    from models import Transaction, Material
+    # Importar Material internamente si es necesario, pero ya está en la cabecera
     
     transacciones = Transaction.query.filter_by(
         user_id=user_id,
@@ -46,7 +48,8 @@ def calcular_impacto_ambiental(user_id):
 
 
 def obtener_ranking_estudiantes(limite=10):
-    """Obtiene el ranking de estudiantes por puntos"""
+    """Obtiene el ranking de estudiantes por puntos históricos"""
+    # Esta función ya estaba correcta, ordenando por el campo historico
     return User.query.filter_by(is_admin=False)\
         .order_by(User.puntos_historicos.desc())\
         .limit(limite)\
@@ -54,30 +57,39 @@ def obtener_ranking_estudiantes(limite=10):
 
 
 def obtener_ranking_facultades():
-    """Obtiene el ranking de facultades por puntos totales"""
+    """Obtiene el ranking de facultades por puntos históricos totales"""
     resultado = db.session.query(
         User.facultad,
-        func.sum(User.puntos_totales).label('puntos_historicos'),
+        func.sum(User.puntos_historicos).label('puntos_historicos'),
         func.count(User.id).label('total_estudiantes')
-    ).filter(User.is_admin == False)\
-     .group_by(User.facultad)\
-     .order_by(func.sum(User.puntos_historicos).desc())\
-     .all()
+    ).filter(
+        User.is_admin == False,
+        User.facultad != None # Ignorar usuarios sin facultad
+    ).group_by(User.facultad)\
+     .order_by(
+         # CORRECCIÓN: Ordenar por el campo agregado (puntos_historicos)
+         func.sum(User.puntos_historicos).desc()
+     ).all()
     
     return [{'facultad': r[0], 'puntos': r[1], 'estudiantes': r[2]} for r in resultado]
 
 
 def obtener_ranking_carreras():
-    """Obtiene el ranking de carreras por puntos totales"""
+    """Obtiene el ranking de carreras por puntos históricos totales"""
     resultado = db.session.query(
         User.carrera,
         User.facultad,
-        func.sum(User.puntos_totales).label('puntos_historicos'),
+        func.sum(User.puntos_historicos).label('puntos_historicos'),
         func.count(User.id).label('total_estudiantes')
-    ).filter(User.is_admin == False)\
-     .group_by(User.carrera, User.facultad)\
-     .order_by(func.sum(User.puntos_historicos).desc())\
-     .limit(20)\
+    ).filter(
+        User.is_admin == False,
+        User.carrera != None, # Ignorar usuarios sin carrera
+        User.facultad != None
+    ).group_by(User.carrera, User.facultad)\
+     .order_by(
+         # CORRECCIÓN: Ordenar por el campo agregado (puntos_historicos)
+         func.sum(User.puntos_historicos).desc()
+     ).limit(20)\
      .all()
     
     return [{'carrera': r[0], 'facultad': r[1], 'puntos': r[2], 'estudiantes': r[3]} for r in resultado]
@@ -86,11 +98,11 @@ def obtener_ranking_carreras():
 def estadisticas_globales():
     """Obtiene estadísticas globales del sistema"""
     total_usuarios = User.query.filter_by(is_admin=False).count()
+    # Usamos puntos_historicos para total_puntos global
     total_puntos = db.session.query(func.sum(User.puntos_historicos)).scalar() or 0
     total_transacciones = Transaction.query.count()
     
     # Calcular impacto total
-    from models import Material
     transacciones_reciclaje = Transaction.query.filter_by(tipo='reciclaje').all()
     
     co2_total = 0
@@ -120,7 +132,94 @@ def estadisticas_globales():
     }
 
 
-# Funciones de Casino
+def obtener_nombre_carrera(codigo_carrera):
+    """
+    Traduce el código de carrera (ej: 'ing_inf') a su nombre real 
+    (ej: 'Ingeniería Informática') buscando en Config.
+    """
+    if not codigo_carrera:
+        return "Sin Carrera"
+    for facultad, carreras in Config.UCA_DEPARTAMENTOS.items():
+        for cod, nombre in carreras:
+            if cod == codigo_carrera:
+                return nombre
+    return codigo_carrera.replace('_', ' ').title()
+
+
+# --- Funciones de Misiones ---
+
+def asignar_misiones(user):
+    """Asigna misiones diarias y semanales a un usuario si no las tiene."""
+    today = date.today()
+    start_of_week = today - timedelta(days=today.weekday())
+
+    # Verificar misiones diarias
+    mision_diaria_existente = UserMision.query.filter(
+        UserMision.user_id == user.id,
+        UserMision.mision.has(frecuencia='diaria'),
+        func.date(UserMision.fecha_asignacion) == today
+    ).first()
+
+    if not mision_diaria_existente:
+        # Asignar una nueva misión diaria aleatoria
+        misiones_diarias = Mision.query.filter_by(frecuencia='diaria', activo=True).all()
+        if misiones_diarias:
+            nueva_mision = random.choice(misiones_diarias)
+            um = UserMision(user_id=user.id, mision_id=nueva_mision.id)
+            db.session.add(um)
+
+    # Verificar misiones semanales
+    mision_semanal_existente = UserMision.query.filter(
+        UserMision.user_id == user.id,
+        UserMision.mision.has(frecuencia='semanal'),
+        func.date(UserMision.fecha_asignacion) >= start_of_week
+    ).first()
+
+    if not mision_semanal_existente:
+        # Asignar una nueva misión semanal aleatoria
+        misiones_semanales = Mision.query.filter_by(frecuencia='semanal', activo=True).all()
+        if misiones_semanales:
+            nueva_mision = random.choice(misiones_semanales)
+            um = UserMision(user_id=user.id, mision_id=nueva_mision.id)
+            db.session.add(um)
+    
+    db.session.commit()
+
+
+def actualizar_progreso_mision(user, tipo_accion, cantidad=1):
+    """
+    Actualiza el progreso de las misiones activas de un usuario.
+    tipo_accion: 'reciclaje', 'quiz', 'login', etc.
+    """
+    today = date.today()
+    start_of_week = today - timedelta(days=today.weekday())
+
+    misiones_activas = UserMision.query.join(Mision).filter(
+        UserMision.user_id == user.id,
+        UserMision.completada == False,
+        Mision.tipo == tipo_accion,
+        # Filtrar para misiones de hoy o de esta semana
+        ((Mision.frecuencia == 'diaria') & (func.date(UserMision.fecha_asignacion) == today)) |
+        ((Mision.frecuencia == 'semanal') & (func.date(UserMision.fecha_asignacion) >= start_of_week))
+    ).all()
+
+    misiones_completadas = []
+    for um in misiones_activas:
+        um.progreso += cantidad
+        if um.progreso >= um.mision.objetivo:
+            um.completada = True
+            user.agregar_puntos(
+                cantidad=um.mision.recompensa_puntos,
+                tipo='mision',
+                descripcion=f"Recompensa por misión: {um.mision.nombre}"
+            )
+            misiones_completadas.append(um.mision)
+    
+    db.session.commit()
+    return misiones_completadas
+
+
+# --- Funciones de Casino (Legacy) ---
 
 def jugar_ruleta(numero_apostado=None, tipo_apuesta='numero'):
     """
@@ -290,92 +389,3 @@ def verificar_logros(user):
                 logros_obtenidos.append(logro)
     
     return logros_obtenidos
-
-
-# --- Funciones de Misiones ---
-
-def asignar_misiones(user):
-    """Asigna misiones diarias y semanales a un usuario si no las tiene."""
-    today = date.today()
-    start_of_week = today - timedelta(days=today.weekday())
-
-    # Verificar misiones diarias
-    mision_diaria_existente = UserMision.query.filter(
-        UserMision.user_id == user.id,
-        UserMision.mision.has(frecuencia='diaria'),
-        func.date(UserMision.fecha_asignacion) == today
-    ).first()
-
-    if not mision_diaria_existente:
-        # Asignar una nueva misión diaria aleatoria
-        misiones_diarias = Mision.query.filter_by(frecuencia='diaria', activo=True).all()
-        if misiones_diarias:
-            nueva_mision = random.choice(misiones_diarias)
-            um = UserMision(user_id=user.id, mision_id=nueva_mision.id)
-            db.session.add(um)
-
-    # Verificar misiones semanales
-    mision_semanal_existente = UserMision.query.filter(
-        UserMision.user_id == user.id,
-        UserMision.mision.has(frecuencia='semanal'),
-        func.date(UserMision.fecha_asignacion) >= start_of_week
-    ).first()
-
-    if not mision_semanal_existente:
-        # Asignar una nueva misión semanal aleatoria
-        misiones_semanales = Mision.query.filter_by(frecuencia='semanal', activo=True).all()
-        if misiones_semanales:
-            nueva_mision = random.choice(misiones_semanales)
-            um = UserMision(user_id=user.id, mision_id=nueva_mision.id)
-            db.session.add(um)
-    
-    db.session.commit()
-
-
-def actualizar_progreso_mision(user, tipo_accion, cantidad=1):
-    """
-    Actualiza el progreso de las misiones activas de un usuario.
-    tipo_accion: 'reciclaje', 'quiz', 'login', etc.
-    """
-    today = date.today()
-    start_of_week = today - timedelta(days=today.weekday())
-
-    misiones_activas = UserMision.query.join(Mision).filter(
-        UserMision.user_id == user.id,
-        UserMision.completada == False,
-        Mision.tipo == tipo_accion,
-        # Filtrar para misiones de hoy o de esta semana
-        ((Mision.frecuencia == 'diaria') & (func.date(UserMision.fecha_asignacion) == today)) |
-        ((Mision.frecuencia == 'semanal') & (func.date(UserMision.fecha_asignacion) >= start_of_week))
-    ).all()
-
-    misiones_completadas = []
-    for um in misiones_activas:
-        um.progreso += cantidad
-        if um.progreso >= um.mision.objetivo:
-            um.completada = True
-            user.agregar_puntos(
-                cantidad=um.mision.recompensa_puntos,
-                tipo='mision',
-                descripcion=f"Recompensa por misión: {um.mision.nombre}"
-            )
-            misiones_completadas.append(um.mision)
-    
-    db.session.commit()
-    return misiones_completadas
-
-
-
-from config import Config
-def obtener_nombre_carrera(codigo_carrera):
-    """
-    Traduce el código de carrera (ej: 'ing_inf') a su nombre real 
-    (ej: 'Ingeniería Informática') buscando en Config.
-    """
-    if not codigo_carrera:
-        return "Sin Carrera"
-    for facultad, carreras in Config.UCA_DEPARTAMENTOS.items():
-        for cod, nombre in carreras:
-            if cod == codigo_carrera:
-                return nombre
-    return codigo_carrera.replace('_', ' ').title()
