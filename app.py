@@ -1,17 +1,18 @@
 from flask import Flask, render_template, request, session
 from flask_babel import Babel
 from flask_login import LoginManager
-from flask_mail import Mail
+from flask_mail import Mail # Importación necesaria
 from config import Config
 from models import db, User
 from flask_migrate import Migrate 
-# Importamos ambas funciones de utilidad
 from utils import inject_csrf_token, obtener_nombre_carrera
 import os
 import traceback
-from flask_babel import Babel, gettext
+
+# Inicialización global de extensiones
 babel = Babel()
-migrate = Migrate() 
+migrate = Migrate()
+mail = Mail() # <--- IMPORTANTE: Inicializar globalmente aquí
 
 def create_app(config_class=Config):
     """Factory para crear la aplicación Flask"""
@@ -26,10 +27,11 @@ def create_app(config_class=Config):
             return session.get('language')
         return request.accept_languages.best_match(app.config['LANGUAGES'])
 
-    # Inicializar extensiones
+    # Inicializar extensiones con la app
     babel.init_app(app, locale_selector=get_locale)
     db.init_app(app)
     migrate.init_app(app, db) 
+    mail.init_app(app) # <--- IMPORTANTE: Vincular la instancia global a la app
     
     # Configurar Flask-Login
     login_manager = LoginManager()
@@ -58,18 +60,15 @@ def create_app(config_class=Config):
     app.register_blueprint(admin_bp)
     app.register_blueprint(share_bp)
     
-    # Registrar procesador de contexto CSRF
+    # Registrar procesadores de contexto
     app.context_processor(inject_csrf_token)
-    
-    # === CORRECCIÓN AQUÍ ===
-    # Unificamos todas las utilidades en una sola función decorada
+   
     @app.context_processor
     def inject_utilities():
         return dict(
             get_locale=get_locale,
             obtener_nombre_carrera=obtener_nombre_carrera 
         )
-    # =======================
 
     # Crear tablas si no existen
     with app.app_context():

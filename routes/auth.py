@@ -4,14 +4,37 @@ from models import db, User
 from flask_babel import gettext as _
 from forms import RegistroForm, LoginForm, RequestResetForm, ResetPasswordForm
 from utils import actualizar_progreso_mision
+from flask_mail import Message 
+from app import mail # Importar la instancia global 'mail'
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 def send_password_reset_email(user):
     token = user.get_reset_token()
     reset_url = url_for('auth.reset_token', token=token, _external=True)
-    # En una aplicación real, enviaríamos un email. Por ahora, mostramos el enlace en un flash.
-    flash(_('Para resetear la contraseña, visita: %(reset_url)s', reset_url=reset_url), 'info')
+    
+    msg = Message(_('Recuperación de Contraseña - UCA Puntos Verdes'), 
+                  recipients=[user.email])
+    
+    # 1. Cuerpo HTML (El diseño bonito)
+    msg.html = render_template('auth/reset_password.html', 
+                               user=user, 
+                               reset_url=reset_url)
+    
+    # 2. Cuerpo Texto Plano (Respaldo por si el correo del usuario no carga HTML)
+    msg.body = f"""Hola {user.nombre_completo},
+    
+Para resetear tu contraseña, visita el siguiente enlace:
+{reset_url}
+
+Si no realizaste esta solicitud, ignora este correo.
+"""
+    
+    try:
+        mail.send(msg)
+        print(f"\n[EMAIL SENT] To: {user.email}\n") 
+    except Exception as e:
+        print(f"\n[EMAIL ERROR] No se pudo enviar el correo: {e}\n")
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -83,7 +106,9 @@ def reset_request():
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        send_password_reset_email(user)
+        if user:
+            send_password_reset_email(user)
+        # Siempre mostramos el mensaje por seguridad, exista o no el usuario
         flash(_('Se ha enviado un correo con las instrucciones para resetear tu contraseña.'), 'info')
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_request.html', title=_('Resetear Contraseña'), form=form)

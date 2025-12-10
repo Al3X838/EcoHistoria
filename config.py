@@ -6,8 +6,7 @@ class Config:
     # Clave secreta para sesiones y CSRF
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
     
-    # basedir = os.path.abspath(os.path.dirname(__file__))
-
+    # Base de datos
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
     'sqlite:///uca_verde.db'
     
@@ -27,12 +26,17 @@ class Config:
         'Eco Maestro': 1501
     }
     
- 
+    # Configuración de Correo (Asegúrese de usar variables de entorno en producción)
+    MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.googlemail.com'
+    MAIL_PORT = int(os.environ.get('MAIL_PORT') or 587)
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'True') == 'True' 
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'ecopuntosuca@gmail.com' 
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'bhgzxzsvdthnhomz'    
+    MAIL_DEFAULT_SENDER = ('UCA Puntos Verdes', MAIL_USERNAME)
+
     ITEMS_PER_PAGE = 25
     LANGUAGES = ['es', 'en']
 
-
-    
     UCA_DEPARTAMENTOS = {
         'Ciencias y Tecnología': [
             ('ing_informatica', 'Ingeniería Informática'),
@@ -72,5 +76,4 @@ class Config:
             ('teologia', 'Teología'),
             ('historia', 'Historia')
         ]
-        
     }

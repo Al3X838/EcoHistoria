@@ -15,7 +15,7 @@
             
             <div class="form-group">
                 <label for="password">{{ _('Nueva Contraseña') }}</label>
-                {{ form.password(class="form-control", placeholder=_('Mínimo 6 caracteres')) }}
+                {{ form.password(class="form-control", placeholder=_('No la olvides')) }}
                 {% if form.password.errors %}
                     <span class="form-error">{{ form.password.errors[0] }}</span>
                 {% endif %}
@@ -23,7 +23,7 @@
 
             <div class="form-group">
                 <label for="password2">{{ _('Confirmar Nueva Contraseña') }}</label>
-                {{ form.password2(class="form-control", placeholder=_('Repetir contraseña')) }}
+                {{ form.password2(class="form-control", placeholder=_('En serio, no la  olvides')) }}
                 {% if form.password2.errors %}
                     <span class="form-error">{{ form.password2.errors[0] }}</span>
                 {% endif %}
