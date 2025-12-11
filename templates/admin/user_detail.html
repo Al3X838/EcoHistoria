@@ -8,8 +8,8 @@
     </div>
 
     <div class="row">
-        <!-- Columna Izquierda: Información del Usuario -->
         <div class="col-md-4">
+
             <div class="card mb-4">
                 <div class="card-header">
                     <h3>Información Personal</h3>
@@ -29,7 +29,6 @@
                         {% endif %}
                     </p>
 
-                    <!-- Botón Desactivar/Activar (RF024) -->
                     <form action="{{ url_for('admin.toggle_usuario', user_id=user.id) }}" method="POST"
                         onsubmit="return confirm('¿Estás seguro de realizar esta acción?');">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -39,6 +38,38 @@
                         <button type="submit" class="btn btn-success btn-block">✅ Activar Cuenta</button>
                         {% endif %}
                     </form>
+                </div>
+            </div>
+
+            <div class="card mb-4" style="border: 2px solid #f59e0b;">
+                <div class="card-header" style="background-color: #fef3c7;">
+                    <h3 style="color: #92400e; margin: 0; font-size: 1.1rem;">👮 Gestión de Roles</h3>
+                </div>
+                <div class="card-body">
+                    <p>Rol Actual: <strong>{{ user.role|upper }}</strong></p>
+
+                    <form method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group mb-3">
+                            <label for="nuevo_rol">Asignar nuevo rol:</label>
+                            <select name="nuevo_rol" id="nuevo_rol" class="form-control">
+                                <option value="estudiante" {% if user.role=='estudiante' %}selected{% endif %}>
+                                    Estudiante (Comunidad)</option>
+                                <option value="funcionario" {% if user.role=='funcionario' %}selected{% endif %}>
+                                    Funcionario Autorizado</option>
+                                <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Administrador
+                                </option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-block"
+                            onclick="return confirm('¿Estás seguro de cambiar los permisos de este usuario?');">
+                            Actualizar Permisos
+                        </button>
+                    </form>
+                    <small class="text-muted mt-2 d-block">
+                        * <strong>Funcionario:</strong> Acceso a registrar entregas y validar cupones.<br>
+                        * <strong>Admin:</strong> Control total del sistema.
+                    </small>
                 </div>
             </div>
 
@@ -63,10 +94,8 @@
             </div>
         </div>
 
-        <!-- Columna Derecha: Acciones y Transacciones -->
         <div class="col-md-8">
 
-            <!-- Formulario Ajustar Puntos (RF023) -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h3>⚙️ Ajustar Puntos Manualmente</h3>
@@ -97,7 +126,6 @@
                 </div>
             </div>
 
-            <!-- Historial Reciente -->
             <div class="card">
                 <div class="card-header">
                     <h3>📜 Historial Reciente</h3>

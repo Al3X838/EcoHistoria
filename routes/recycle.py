@@ -8,66 +8,23 @@ from flask_babel import gettext as _
 
 recycle_bp = Blueprint('recycle', __name__, url_prefix='/recycle')
 
-@recycle_bp.route('/', methods=['GET', 'POST'])
+@recycle_bp.route('/', methods=['GET'])
 @login_required
 def index():
     """Página principal de reciclaje"""
-    form = ReciclajeForm()
+    # MODIFICADO: Se eliminó la lógica del formulario (POST) para que el usuario no pueda registrar.
     
     # Cargar materiales activos
     materiales = Material.query.filter_by(activo=True).all()
-    form.material_id.choices = [(m.id, f"{m.nombre} - {m.puntos_valor} pts") for m in materiales]
     
-    if form.validate_on_submit():
-        material = Material.query.get(form.material_id.data)
-        cantidad = form.cantidad.data
-        
-        if material:
-            puntos_ganados = material.puntos_valor * cantidad
-            metadata = json.dumps({
-                'material_id': material.id,
-                'material_nombre': material.nombre,
-                'cantidad': cantidad,
-                'puntos_unitarios': material.puntos_valor
-            })
-            
-            current_user.agregar_puntos(
-                puntos_ganados,
-                'reciclaje',
-                f"Reciclaje de {cantidad} {material.nombre}"
-            )
-            
-            ultima_transaccion = Transaction.query.filter_by(user_id=current_user.id)\
-                .order_by(Transaction.fecha.desc()).first()
-            if ultima_transaccion:
-                ultima_transaccion.metadata_json = metadata
-            
-            db.session.commit()
-
-            # Actualizar misiones de tipo 'reciclaje'
-            misiones_completadas = actualizar_progreso_mision(current_user, 'reciclaje', cantidad)
-            if misiones_completadas:
-                for mision in misiones_completadas:
-                    flash(_('¡Misión cumplida: %(nombre)s! Recompensa: %(puntos)s puntos.',
-                            nombre=mision.nombre, puntos=mision.recompensa_puntos), 'success')
-            
-            # Verificar logros
-            logros = verificar_logros(current_user)
-            if logros:
-                for logro in logros:
-                    flash(f'🏆 ¡Nuevo logro desbloqueado: {logro.nombre}!', 'success')
-
-            db.session.commit()
-            
-            flash(f'¡Excelente! Has ganado {puntos_ganados} puntos por reciclar {cantidad} {material.nombre}. 🌱', 'success')
-            return redirect(url_for('recycle.index'))
-    
+    # Historial reciente
     historial = Transaction.query.filter_by(user_id=current_user.id, tipo='reciclaje')\
         .order_by(Transaction.fecha.desc())\
         .limit(10)\
         .all()
     
-    return render_template('recycle/recycle.html', form=form, materiales=materiales, historial=historial)
+    # Renderizamos sin el formulario
+    return render_template('recycle/recycle.html', materiales=materiales, historial=historial)
 
 
 @recycle_bp.route('/history')

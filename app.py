@@ -51,7 +51,9 @@ def create_app(config_class=Config):
     from routes.casino import casino_bp
     from routes.admin import admin_bp
     from routes.share import share_bp
+    from routes.staff import staff_bp
     
+    app.register_blueprint(staff_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(recycle_bp)

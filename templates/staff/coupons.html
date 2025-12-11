@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Validar Cupones - Staff{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_styles.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title"><span class="icon">🎫</span> Validar Cupones (CU-15)</h1>
+        <a href="{{ url_for('staff.dashboard') }}" class="btn btn-secondary">← Volver al Panel</a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" style="display: flex; gap: 10px;">
+                <input type="text" name="q" class="form-control"
+                    placeholder="Escanear código (Ej: UCA-A1B2) o buscar por usuario..." value="{{ search_query }}"
+                    autofocus>
+                <button type="submit" class="btn btn-primary">🔍 Buscar</button>
+                {% if search_query %}
+                <a href="{{ url_for('staff.validar_canjes') }}" class="btn btn-secondary">Limpiar</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    {% if cupones %}
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Estudiante</th>
+                        <th>Recompensa</th>
+                        <th>Fecha Canje</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for canje in cupones %}
+                    <tr class="{% if canje.estado == 'entregado' %}table-success{% endif %}">
+                        <td style="vertical-align: middle;">
+                            <span
+                                style="font-family: monospace; font-weight: bold; font-size: 1.2em; color: var(--verde-primario);">
+                                {{ canje.codigo }}
+                            </span>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            <div style="font-weight: bold;">{{ canje.usuario.nombre_completo }}</div>
+                            <div style="font-size: 0.85em; color: #666;">{{ canje.usuario.facultad }}</div>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            {{ canje.recompensa.nombre }}
+                        </td>
+                        <td style="vertical-align: middle;">
+                            {{ canje.fecha_canje.strftime('%d/%m/%Y %H:%M') }}
+                        </td>
+                        <td style="vertical-align: middle;">
+                            {% if canje.estado == 'entregado' %}
+                            <span class="badge badge-success">ENTREGADO</span>
+                            {% else %}
+                            <span class="badge badge-warning">PENDIENTE</span>
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align: middle;">
+                            {% if canje.estado == 'pendiente' %}
+                            <form action="{{ url_for('staff.marcar_entregado', id=canje.id) }}" method="POST">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-primary btn-sm"
+                                    onclick="return confirm('¿Confirmas que estás entregando el premio físico a {{ canje.usuario.nombre_completo }}?');">
+                                    📦 Entregar Premio
+                                </button>
+                            </form>
+                            {% else %}
+                            <button class="btn btn-secondary btn-sm" disabled>✅ Completado</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% elif search_query %}
+    <div class="alert alert-warning text-center">
+        No se encontraron cupones que coincidan con "<strong>{{ search_query }}</strong>".
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>Utiliza el buscador para encontrar un cupón por su código o por el nombre del estudiante.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

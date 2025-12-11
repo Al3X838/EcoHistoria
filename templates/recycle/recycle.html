@@ -8,44 +8,37 @@
         <h1 class="page-title">
             <span class="icon">♻️</span> Centro de Reciclaje
         </h1>
-        <p class="page-subtitle">Registra tus materiales reciclados y gana puntos</p>
+        <p class="page-subtitle">Consulta materiales y verifica tu historial</p>
     </div>
 
     <div class="recycle-grid">
-        <!-- Formulario de Reciclaje -->
-        <div class="card recycle-form-card">
-            <h2 class="card-title">Registrar Material</h2>
-            
-            <form method="POST" class="recycle-form">
-                {{ form.hidden_tag() }}
-                
-                <div class="form-group">
-                    <label for="material_id">Tipo de Material</label>
-                    {{ form.material_id(class="form-control") }}
-                    {% if form.material_id.errors %}
-                        <span class="form-error">{{ form.material_id.errors[0] }}</span>
-                    {% endif %}
-                </div>
+        <div class="card recycle-form-card" style="text-align: center; padding: 3rem;">
+            <h2 class="card-title" style="justify-content: center;">📍 Punto de Entrega</h2>
 
-                <div class="form-group">
-                    <label for="cantidad">Cantidad</label>
-                    {{ form.cantidad(class="form-control", min="1", max="100", value="1") }}
-                    {% if form.cantidad.errors %}
-                        <span class="form-error">{{ form.cantidad.errors[0] }}</span>
-                    {% endif %}
-                    <small class="form-hint">Máximo 100 unidades por registro</small>
-                </div>
+            <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 2rem;">
+                Para registrar tus materiales y sumar puntos, acércate a un <strong>Punto Verde Autorizado</strong>.
+                Un funcionario validará tu entrega al instante.
+            </p>
 
-                <button type="submit" class="btn btn-primary btn-block">
-                    ♻️ Registrar Reciclaje
-                </button>
-            </form>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; flex: 1; min-width: 150px;">
+                    <div style="font-size: 2rem;">🗑️</div>
+                    <strong>1. Junta</strong>
+                </div>
+                <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; flex: 1; min-width: 150px;">
+                    <div style="font-size: 2rem;">🚶</div>
+                    <strong>2. Entrega</strong>
+                </div>
+                <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; flex: 1; min-width: 150px;">
+                    <div style="font-size: 2rem;">✨</div>
+                    <strong>3. Suma Puntos</strong>
+                </div>
+            </div>
         </div>
 
-        <!-- Catálogo de Materiales -->
         <div class="card materiales-card">
             <h2 class="card-title">Materiales Aceptados</h2>
-            
+
             <div class="materiales-grid">
                 {% for material in materiales %}
                 <div class="material-item">
@@ -76,32 +69,30 @@
             </div>
         </div>
 
-        <!-- Historial Reciente -->
         <div class="card historial-card">
             <h2 class="card-title">
                 <span>📊 Historial Reciente</span>
                 <a href="{{ url_for('recycle.history') }}" class="btn-link-small">Ver todo</a>
             </h2>
-            
+
             {% if historial %}
-                <div class="historial-list">
-                    {% for trans in historial %}
-                    <div class="historial-item">
-                        <div class="historial-icon">♻️</div>
-                        <div class="historial-content">
-                            <p class="historial-desc">{{ trans.descripcion }}</p>
-                            <p class="historial-date">{{ trans.fecha.strftime('%d/%m/%Y %H:%M') }}</p>
-                        </div>
-                        <div class="historial-points">+{{ trans.puntos }} pts</div>
+            <div class="historial-list">
+                {% for trans in historial %}
+                <div class="historial-item">
+                    <div class="historial-icon">♻️</div>
+                    <div class="historial-content">
+                        <p class="historial-desc">{{ trans.descripcion }}</p>
+                        <p class="historial-date">{{ trans.fecha.strftime('%d/%m/%Y %H:%M') }}</p>
                     </div>
-                    {% endfor %}
+                    <div class="historial-points">+{{ trans.puntos }} pts</div>
                 </div>
+                {% endfor %}
+            </div>
             {% else %}
-                <p class="empty-state">No has reciclado aún. ¡Empieza ahora! 🌱</p>
+            <p class="empty-state">No has reciclado aún. ¡Empieza ahora! 🌱</p>
             {% endif %}
         </div>
 
-        <!-- Tips de Reciclaje -->
         <div class="card tips-card">
             <h2 class="card-title">💡 Tips de Reciclaje</h2>
             <div class="tips-list">

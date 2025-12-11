@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Funcionario - UCA Verde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="icon">📋</span> Panel de Operaciones
+        </h1>
+        <p class="page-subtitle">Área exclusiva para Funcionarios Autorizados</p>
+    </div>
+
+    <div class="quick-actions">
+        <div class="actions-grid">
+            <a href="{{ url_for('staff.registrar_entrega') }}" class="action-card">
+                <div class="action-icon">⚖️</div>
+                <h3>Registrar Entrega</h3>
+                <p>Cargar puntos por material reciclado a un estudiante.</p>
+            </a>
+
+            <a href="{{ url_for('staff.validar_canjes') }}" class="action-card">
+                <div class="action-icon">🎫</div>
+                <h3>Validar Cupones</h3>
+                <p>Verificar códigos y entregar recompensas físicas.</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

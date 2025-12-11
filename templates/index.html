@@ -4,7 +4,28 @@
 
 {% block content %}
 <div class="container dashboard">
-    <!-- Hero Section -->
+    {% if current_user.is_staff %}
+    <div class="card staff-banner"
+        style="background: linear-gradient(135deg, #0f766e, #115e59); margin-bottom: 2rem; border: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+        <div
+            style="padding: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div style="color: white;">
+                <h2 style="margin: 0; font-size: 1.8rem; display: flex; align-items: center; gap: 10px;">
+                    <span>📋</span> Hola Funcionario, {{ current_user.nombre_completo.split()[0] }}
+                </h2>
+                <p style="margin: 0.5rem 0 0; opacity: 0.9; font-size: 1.1rem;">
+                    Tienes acceso autorizado para gestionar entregas y cupones.
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('staff.dashboard') }}" class="btn"
+                    style="background-color: white; color: #0f766e; font-weight: 800; padding: 12px 25px; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s;">
+                    ⚙️ Ir al Panel de Operaciones ➜
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="hero-section">
         <h1 class="welcome-title">{{ _('¡Hola, %(nombre)s! 👋', nombre=current_user.nombre_completo.split()[0]) }}</h1>
         <p class="welcome-subtitle">{{ _('Bienvenido a tu espacio verde') }}</p>
@@ -235,7 +256,7 @@
                 <h3>{{ _('Ver Recompensas') }}</h3>
                 <p>{{ _('Canjea tus puntos') }}</p>
             </a>
-           
+
         </div>
     </div>
 </div>

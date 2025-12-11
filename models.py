@@ -21,6 +21,7 @@ class User(UserMixin, db.Model):
     nombre_completo = db.Column(db.String(150), nullable=False)
     facultad = db.Column(db.String(100))
     carrera = db.Column(db.String(100))
+    role = db.Column(db.String(20), default='estudiante') # Opciones: 'estudiante', 'funcionario', 'admin'
     puntos_totales = db.Column(db.Integer, default=0)
     puntos_historicos = db.Column(db.Integer, default=0)
     nivel = db.Column(db.String(50), default='Semilla Verde')
@@ -39,6 +40,15 @@ class User(UserMixin, db.Model):
     juegos_casino = db.relationship('CasinoGame', backref='jugador', lazy='dynamic')
     quizzes_completados = db.relationship('UserQuiz', backref='estudiante', lazy='dynamic')
     misiones = db.relationship('UserMision', backref='usuario', lazy='dynamic')
+
+    @property
+    def is_staff(self):
+        """Permite acceso a funcionarios y admins"""
+        return self.role in ['funcionario', 'admin']
+    
+    @property
+    def is_admin_property(self):
+        return self.role == 'admin' or self.is_admin
     
     @property
     def is_active(self):
