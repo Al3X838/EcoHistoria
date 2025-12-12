@@ -6,7 +6,7 @@ from utils import estadisticas_globales
 from forms import AjustarPuntosForm # Asegúrate de importar el nuevo form
 from models import User, Transaction # Asegúrate de importar User y Transaction
 # routes/admin.py
-from models import db, Material, Reward, User, Transaction, UserReward  # <--- Agregamos UserReward
+from models import db, Material, Reward, User, Transaction, UserReward, EducationalContent  # <--- Agregamos UserReward y EducationalContent
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 def admin_required(f):
@@ -404,3 +404,82 @@ def validar_cupon(id):
         flash(f'Cupón {canje.codigo} validado y marcado como ENTREGADO.', 'success')
         
     return redirect(url_for('admin.cupones'))
+
+
+# ==================== GESTIÓN DE CONTENIDO EDUCATIVO ====================
+
+@admin_bp.route('/educational-content', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def educational_content():
+    """Gestión de contenido educativo"""
+    if request.method == 'POST':
+        try:
+            nuevo_contenido = EducationalContent(
+                titulo=request.form.get('titulo'),
+                descripcion=request.form.get('descripcion'),
+                link=request.form.get('link'),
+                activo=True
+            )
+            db.session.add(nuevo_contenido)
+            db.session.commit()
+            flash(f'Contenido "{nuevo_contenido.titulo}" creado exitosamente.', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error al crear contenido: {str(e)}', 'danger')
+        return redirect(url_for('admin.educational_content'))
+
+    contenidos = EducationalContent.query.order_by(EducationalContent.fecha_creacion.desc()).all()
+    return render_template('admin/educational_content.html', contenidos=contenidos)
+
+
+@admin_bp.route('/educational-content/editar/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def editar_educational_content(id):
+    """Editar contenido educativo"""
+    contenido = EducationalContent.query.get_or_404(id)
+    try:
+        contenido.titulo = request.form.get('titulo')
+        contenido.descripcion = request.form.get('descripcion')
+        contenido.link = request.form.get('link')
+        
+        db.session.commit()
+        flash(f'Contenido "{contenido.titulo}" actualizado exitosamente.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error al actualizar contenido: {str(e)}', 'danger')
+        
+    return redirect(url_for('admin.educational_content'))
+
+
+@admin_bp.route('/educational-content/toggle/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def toggle_educational_content(id):
+    """Activar/desactivar contenido educativo"""
+    contenido = EducationalContent.query.get_or_404(id)
+    contenido.activo = not contenido.activo
+    db.session.commit()
+    
+    estado = 'activado' if contenido.activo else 'desactivado'
+    flash(f'Contenido "{contenido.titulo}" ha sido {estado}.', 'success')
+    return redirect(url_for('admin.educational_content'))
+
+
+@admin_bp.route('/educational-content/eliminar/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def eliminar_educational_content(id):
+    """Eliminar contenido educativo"""
+    contenido = EducationalContent.query.get_or_404(id)
+    try:
+        titulo = contenido.titulo
+        db.session.delete(contenido)
+        db.session.commit()
+        flash(f'Contenido "{titulo}" eliminado exitosamente.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error al eliminar contenido: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.educational_content'))

@@ -11,9 +11,32 @@
         <p class="page-subtitle">Completa tareas educativas y gana puntos extra</p>
     </div>
 
+    <!-- Feed Educativo -->
+    <div class="section">
+        <h2 class="section-title">📰 Feed Educativo</h2>
+        <div class="tasks-grid">
+            {% for contenido in contenidos %}
+            <div class="task-card">
+                <div class="task-icon">📖</div>
+                <div class="task-content">
+                    <h3 class="task-title">{{ contenido.titulo }}</h3>
+                    <p class="task-category">Artículo Educativo</p>
+                    <p class="task-description">{{ contenido.descripcion }}</p>
+                </div>
+                <a href="{{ contenido.link }}" target="_blank" class="btn btn-info btn-block">
+                    Leer artículo 🔗
+                </a>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <p class="text-muted">No hay contenido educativo disponible por el momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
     <!-- Quizzes Disponibles -->
     <div class="section">
-        <h2 class="section-title">🧠 Quizzes Educativos</h2>
         <div class="tasks-grid">
             {% for quiz in quizzes %}
             <div class="task-card {% if quiz.id in completados %}completed{% endif %}">
@@ -27,13 +50,13 @@
                     </div>
                 </div>
                 {% if quiz.id in completados %}
-                    <div class="task-status completed">
-                        <span class="status-icon">✅</span> Completado
-                    </div>
+                <div class="task-status completed">
+                    <span class="status-icon">✅</span> Completado
+                </div>
                 {% else %}
-                    <a href="{{ url_for('recycle.quiz', quiz_id=quiz.id) }}" class="btn btn-primary btn-block">
-                        Comenzar Quiz
-                    </a>
+                <a href="{{ url_for('recycle.quiz', quiz_id=quiz.id) }}" class="btn btn-primary btn-block">
+                    Comenzar Quiz
+                </a>
                 {% endif %}
             </div>
             {% endfor %}
@@ -97,7 +120,9 @@
                     <p>Mantén tu racha reciclando durante 7 días consecutivos</p>
                     <div class="challenge-progress">
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: {{ (current_user.racha_actual / 7 * 100) if current_user.racha_actual < 7 else 100 }}%"></div>
+                            <div class="progress-fill"
+                                style="width: {{ (current_user.racha_actual / 7 * 100) if current_user.racha_actual < 7 else 100 }}%">
+                            </div>
                         </div>
                         <span class="progress-text">{{ current_user.racha_actual }}/7 días</span>
                     </div>
