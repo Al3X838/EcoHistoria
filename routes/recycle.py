@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
-from models import db, Material, Transaction, Quiz, QuizQuestion, UserQuiz
+from models import db, Material, Transaction, Quiz, QuizQuestion, UserQuiz, EducationalContent
 from forms import ReciclajeForm
 import json
 from utils import verificar_logros, actualizar_progreso_mision
@@ -90,7 +90,10 @@ def tasks():
     quizzes = Quiz.query.filter_by(activo=True).all()
     quizzes_completados = [uq.quiz_id for uq in UserQuiz.query.filter_by(user_id=current_user.id).all()]
     
-    return render_template('tasks/tasks.html', quizzes=quizzes, completados=quizzes_completados)
+    # Cargar contenido educativo activo
+    contenidos = EducationalContent.query.filter_by(activo=True).order_by(EducationalContent.fecha_creacion.desc()).all()
+    
+    return render_template('tasks/tasks.html', quizzes=quizzes, completados=quizzes_completados, contenidos=contenidos)
 
 
 @recycle_bp.route('/quiz/<int:quiz_id>', methods=['GET', 'POST'])

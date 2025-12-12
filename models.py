@@ -326,3 +326,18 @@ class UserMision(db.Model):
     def __repr__(self):
         return f'<UserMision user={self.user_id} mision={self.mision_id}>'
 
+
+class EducationalContent(db.Model):
+    """Modelo de Contenido Educativo"""
+    __tablename__ = 'educational_content'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(200), nullable=False)
+    descripcion = db.Column(db.Text, nullable=False)
+    link = db.Column(db.String(255), nullable=False)
+    fecha_creacion = db.Column(db.DateTime, default=get_current_time)
+    activo = db.Column(db.Boolean, default=True)
+    
+    def __repr__(self):
+        return f'<EducationalContent {self.titulo}>'
+
