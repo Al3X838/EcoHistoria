@@ -305,13 +305,18 @@ def usuarios():
 @login_required
 @admin_required
 def ver_usuario(user_id):
-    """
-    Ver detalle de usuario y Gestionar Cuenta (RF023 Ajustar Puntos)
-    """
     user = User.query.get_or_404(user_id)
     form = AjustarPuntosForm()
-
-    # Lógica RF023: Ajustar Puntos
+    if request.method == 'POST' and 'nuevo_rol' in request.form:
+        nuevo_rol = request.form.get('nuevo_rol')        
+        if user.id == current_user.id and nuevo_rol != 'admin':
+            flash('⛔ No puedes revocar tus propios permisos de administrador.', 'danger')
+        elif nuevo_rol in ['estudiante', 'funcionario', 'admin']:
+            user.role = nuevo_rol
+            user.is_admin = (nuevo_rol == 'admin')
+            db.session.commit()
+            flash(f'✅ Rol actualizado correctamente a: {nuevo_rol.upper()}', 'success')
+        return redirect(url_for('admin.ver_usuario', user_id=user.id))
     if form.validate_on_submit():
         cantidad = form.puntos.data
         justificacion = form.justificacion.data

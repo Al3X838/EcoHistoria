@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Entrega - Staff{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_styles.css') }}">
+{% endblock %}
+
+{% block content %}
+...
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title"><span class="icon">⚖️</span> Registrar Reciclaje (CU-04)</h1>
+        <a href="{{ url_for('staff.dashboard') }}" class="btn btn-secondary">← Volver al Panel</a>
+    </div>
+
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <div class="card-header">
+            <h3 class="card-title">Nueva Entrega</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ form.identificador.label(class="form-label") }}
+                    {% if form.identificador.errors %}
+                    {{ form.identificador(class="form-control is-invalid", placeholder="Ej: alex123 o
+                    correo@uca.edu.sv") }}
+                    <div class="form-error">{{ form.identificador.errors[0] }}</div>
+                    {% else %}
+                    {{ form.identificador(class="form-control", placeholder="Ej: alex123 o correo@uca.edu.sv") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.material_id.label(class="form-label") }}
+                    {% if form.material_id.errors %}
+                    {{ form.material_id(class="form-control is-invalid") }}
+                    <div class="form-error">{{ form.material_id.errors[0] }}</div>
+                    {% else %}
+                    {{ form.material_id(class="form-control") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.cantidad.label(class="form-label") }}
+                    {% if form.cantidad.errors %}
+                    {{ form.cantidad(class="form-control is-invalid", placeholder="Ingrese la cantidad verificada") }}
+                    <div class="form-error">{{ form.cantidad.errors[0] }}</div>
+                    {% else %}
+                    {{ form.cantidad(class="form-control", placeholder="Ingrese la cantidad verificada") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group mt-4">
+                    {{ form.submit(class="btn btn-primary btn-block btn-lg") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

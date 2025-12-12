@@ -44,6 +44,17 @@ class LoginForm(FlaskForm):
     password = PasswordField(_l('Contraseña'), validators=[DataRequired()])
     submit = SubmitField(_l('Iniciar Sesión'))
 
+class StaffRecycleForm(FlaskForm):
+    """CU-04: Registrar Entrega (Para Funcionarios)"""
+    identificador = StringField('Usuario o Email del Estudiante', validators=[DataRequired()])
+    material_id = SelectField('Tipo de Material', coerce=int, validators=[DataRequired()])
+    cantidad = IntegerField('Cantidad', validators=[DataRequired(), NumberRange(min=1)])
+    submit = SubmitField('Registrar Entrega')
+
+class StaffCouponSearchForm(FlaskForm):
+    """CU-15: Validar Cupón (Para Funcionarios)"""
+    codigo = StringField('Código del Cupón', validators=[DataRequired()])
+    submit = SubmitField('Buscar y Validar')
 
 class RequestResetForm(FlaskForm):
     """Formulario para solicitar reseteo de contraseña"""
